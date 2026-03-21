@@ -2,10 +2,11 @@ class_name CardDeck
 extends RefCounted
 
 const SUITS := ["♠", "♥", "♣", "♦"]
-const RANKS := ["A", "2", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+const RANKS := ["A", "2", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
 const EMPEROR_CARD := "皇帝牌"
 const JOKERS := ["小王", "大王"]
 const SPECIAL_THREES := ["♠3", "♥3", "♣3", "♦3", "♠3"]
+const SPECIAL_FOUR := "♥4"
 
 
 static func build_main_deck() -> Array[String]:
@@ -24,6 +25,7 @@ static func build_main_deck() -> Array[String]:
 			cards.append(EMPEROR_CARD)
 			emperor_added = true
 
+	cards.append(SPECIAL_FOUR)
 	cards.shuffle()
 	return cards
 

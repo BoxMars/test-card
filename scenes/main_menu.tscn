@@ -18,7 +18,24 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.0901961, 0.278431, 0.184314, 1)
+color = Color(0.0509804, 0.109804, 0.105882, 1)
+
+[node name="TopGlow" type="ColorRect" parent="."]
+layout_mode = 1
+offset_right = 960.0
+offset_bottom = 220.0
+color = Color(0.901961, 0.458824, 0.219608, 0.12)
+
+[node name="BottomGlow" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -260.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.105882, 0.447059, 0.376471, 0.22)
 
 [node name="CenterBox" type="CenterContainer" parent="."]
 layout_mode = 1
@@ -54,6 +71,11 @@ horizontal_alignment = 1
 layout_mode = 2
 custom_minimum_size = Vector2(260, 56)
 text = "开始游戏"
+
+[node name="SettingsButton" type="Button" parent="CenterBox/Panel/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(260, 56)
+text = "设置"
 
 [node name="QuitButton" type="Button" parent="CenterBox/Panel/VBox"]
 layout_mode = 2

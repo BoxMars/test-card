@@ -1,0 +1,262 @@
+[gd_scene load_steps=2 format=4]
+
+[ext_resource type="Script" path="res://scripts/settings.gd" id="1_s8w9n"]
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_s8w9n")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0509804, 0.109804, 0.105882, 1)
+
+[node name="TopGlow" type="ColorRect" parent="."]
+layout_mode = 1
+offset_right = 1180.0
+offset_bottom = 210.0
+color = Color(0.901961, 0.458824, 0.219608, 0.1)
+
+[node name="RightGlow" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -320.0
+grow_horizontal = 0
+grow_vertical = 2
+color = Color(0.101961, 0.486275, 0.423529, 0.18)
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="Root" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="Header" type="HBoxContainer" parent="Margin/Root"]
+layout_mode = 2
+
+[node name="TitleBlock" type="VBoxContainer" parent="Margin/Root/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="Margin/Root/Header/TitleBlock"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "卡面设置"
+
+[node name="Subtitle" type="Label" parent="Margin/Root/Header/TitleBlock"]
+layout_mode = 2
+text = "选择程序绘制卡面，或使用图集卡面与 Joker 样式。"
+
+[node name="BackButton" type="Button" parent="Margin/Root/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(140, 42)
+text = "返回"
+
+[node name="Tabs" type="TabContainer" parent="Margin/Root"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="SpacingTab" type="VBoxContainer" parent="Margin/Root/Tabs"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="SpacingPanel" type="PanelContainer" parent="Margin/Root/Tabs/SpacingTab"]
+layout_mode = 2
+
+[node name="SpacingVBox" type="VBoxContainer" parent="Margin/Root/Tabs/SpacingTab/SpacingPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SpacingHeader" type="HBoxContainer" parent="Margin/Root/Tabs/SpacingTab/SpacingPanel/SpacingVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SpacingLabel" type="Label" parent="Margin/Root/Tabs/SpacingTab/SpacingPanel/SpacingVBox/SpacingHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "手牌重叠间距"
+
+[node name="SpacingValue" type="Label" parent="Margin/Root/Tabs/SpacingTab/SpacingPanel/SpacingVBox/SpacingHeader"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "-44"
+
+[node name="SpacingSlider" type="HSlider" parent="Margin/Root/Tabs/SpacingTab/SpacingPanel/SpacingVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = -60.0
+max_value = -10.0
+step = 1.0
+value = -44.0
+
+[node name="PreviewPanel" type="PanelContainer" parent="Margin/Root/Tabs/SpacingTab/SpacingPanel/SpacingVBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 138)
+
+[node name="PreviewCenter" type="CenterContainer" parent="Margin/Root/Tabs/SpacingTab/SpacingPanel/SpacingVBox/PreviewPanel"]
+layout_mode = 2
+
+[node name="PreviewRow" type="HBoxContainer" parent="Margin/Root/Tabs/SpacingTab/SpacingPanel/SpacingVBox/PreviewPanel/PreviewCenter"]
+unique_name_in_owner = true
+layout_mode = 2
+alignment = 1
+
+[node name="RankGapPanel" type="PanelContainer" parent="Margin/Root/Tabs/SpacingTab"]
+layout_mode = 2
+
+[node name="RankGapVBox" type="VBoxContainer" parent="Margin/Root/Tabs/SpacingTab/RankGapPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="RankGapHeader" type="HBoxContainer" parent="Margin/Root/Tabs/SpacingTab/RankGapPanel/RankGapVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RankGapLabel" type="Label" parent="Margin/Root/Tabs/SpacingTab/RankGapPanel/RankGapVBox/RankGapHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "不同点数间距"
+
+[node name="RankGapValue" type="Label" parent="Margin/Root/Tabs/SpacingTab/RankGapPanel/RankGapVBox/RankGapHeader"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="RankGapSlider" type="HSlider" parent="Margin/Root/Tabs/SpacingTab/RankGapPanel/RankGapVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = -60.0
+max_value = -10.0
+step = 1.0
+value = -44.0
+
+[node name="RankPreviewPanel" type="PanelContainer" parent="Margin/Root/Tabs/SpacingTab/RankGapPanel/RankGapVBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 138)
+
+[node name="RankPreviewCenter" type="CenterContainer" parent="Margin/Root/Tabs/SpacingTab/RankGapPanel/RankGapVBox/RankPreviewPanel"]
+layout_mode = 2
+
+[node name="RankPreviewRow" type="HBoxContainer" parent="Margin/Root/Tabs/SpacingTab/RankGapPanel/RankGapVBox/RankPreviewPanel/RankPreviewCenter"]
+unique_name_in_owner = true
+layout_mode = 2
+alignment = 1
+
+[node name="PlayGapPanel" type="PanelContainer" parent="Margin/Root/Tabs/SpacingTab"]
+layout_mode = 2
+
+[node name="PlayGapVBox" type="VBoxContainer" parent="Margin/Root/Tabs/SpacingTab/PlayGapPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PlayGapHeader" type="HBoxContainer" parent="Margin/Root/Tabs/SpacingTab/PlayGapPanel/PlayGapVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PlayGapLabel" type="Label" parent="Margin/Root/Tabs/SpacingTab/PlayGapPanel/PlayGapVBox/PlayGapHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "出牌区间距"
+
+[node name="PlayGapValue" type="Label" parent="Margin/Root/Tabs/SpacingTab/PlayGapPanel/PlayGapVBox/PlayGapHeader"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "-44"
+
+[node name="PlayGapSlider" type="HSlider" parent="Margin/Root/Tabs/SpacingTab/PlayGapPanel/PlayGapVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = -60.0
+max_value = -10.0
+step = 1.0
+value = -44.0
+
+[node name="PlayPreviewPanel" type="PanelContainer" parent="Margin/Root/Tabs/SpacingTab/PlayGapPanel/PlayGapVBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 138)
+
+[node name="PlayPreviewCenter" type="CenterContainer" parent="Margin/Root/Tabs/SpacingTab/PlayGapPanel/PlayGapVBox/PlayPreviewPanel"]
+layout_mode = 2
+
+[node name="PlayPreviewRow" type="HBoxContainer" parent="Margin/Root/Tabs/SpacingTab/PlayGapPanel/PlayGapVBox/PlayPreviewPanel/PlayPreviewCenter"]
+unique_name_in_owner = true
+layout_mode = 2
+alignment = 1
+
+[node name="JokerTab" type="VBoxContainer" parent="Margin/Root/Tabs"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="ModePanel" type="PanelContainer" parent="Margin/Root/Tabs/JokerTab"]
+layout_mode = 2
+
+[node name="ModeBox" type="HBoxContainer" parent="Margin/Root/Tabs/JokerTab/ModePanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ModeLabel" type="Label" parent="Margin/Root/Tabs/JokerTab/ModePanel/ModeBox"]
+layout_mode = 2
+text = "卡面模式"
+
+[node name="ModeOption" type="OptionButton" parent="Margin/Root/Tabs/JokerTab/ModePanel/ModeBox"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(220, 36)
+
+[node name="JokerPanel" type="PanelContainer" parent="Margin/Root/Tabs/JokerTab"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="JokerVBox" type="VBoxContainer" parent="Margin/Root/Tabs/JokerTab/JokerPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="JokerTitle" type="Label" parent="Margin/Root/Tabs/JokerTab/JokerPanel/JokerVBox"]
+layout_mode = 2
+text = "Joker 样式选择"
+
+[node name="JokerNote" type="Label" parent="Margin/Root/Tabs/JokerTab/JokerPanel/JokerVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "大王使用彩色图，小王自动转黑白。"
+
+[node name="Scroll" type="ScrollContainer" parent="Margin/Root/Tabs/JokerTab/JokerPanel/JokerVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="JokerGrid" type="GridContainer" parent="Margin/Root/Tabs/JokerTab/JokerPanel/JokerVBox/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 8
