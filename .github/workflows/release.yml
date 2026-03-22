@@ -136,6 +136,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path (Split-Path "${{ matrix.export_path }}") | Out-Null
           & "$env:GODOT_BIN" --headless --path "$PWD" --export-release "${{ matrix.preset }}" "${{ matrix.export_path }}"
+          Get-ChildItem -Recurse build | Select-Object FullName
 
       - name: Export project
         if: runner.os == 'macOS'
@@ -157,7 +158,11 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path dist | Out-Null
-          Compress-Archive -Path build/windows/TestCard.exe,build/windows/TestCard.pck -DestinationPath "dist/${{ matrix.archive_name }}" -Force
+          $exe = Get-ChildItem -Path build/windows -Filter *.exe -File | Select-Object -First 1
+          $pck = Get-ChildItem -Path build/windows -Filter *.pck -File | Select-Object -First 1
+          if (-not $exe) { throw "Windows export executable not found in build/windows." }
+          if (-not $pck) { throw "Windows export PCK not found in build/windows." }
+          Compress-Archive -Path $exe.FullName,$pck.FullName -DestinationPath "dist/${{ matrix.archive_name }}" -Force
 
       - name: Package artifact
         if: runner.os == 'macOS'

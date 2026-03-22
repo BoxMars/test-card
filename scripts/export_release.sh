@@ -34,7 +34,13 @@ rm -f "$DIST_DIR/${APP_NAME}-windows-x86_64.zip" "$DIST_DIR/${APP_NAME}-macos-un
 echo "Packaging Windows artifact..."
 (
   cd "$BUILD_DIR/windows"
-  zip -q -r "$DIST_DIR/${APP_NAME}-windows-x86_64.zip" "${APP_NAME}.exe" "${APP_NAME}.pck"
+  win_exe="$(find . -maxdepth 1 -name '*.exe' -print | head -n 1)"
+  win_pck="$(find . -maxdepth 1 -name '*.pck' -print | head -n 1)"
+  if [[ -z "$win_exe" || -z "$win_pck" ]]; then
+    echo "Windows package files not found in $BUILD_DIR/windows" >&2
+    exit 1
+  fi
+  zip -q -r "$DIST_DIR/${APP_NAME}-windows-x86_64.zip" "${win_exe#./}" "${win_pck#./}"
 )
 
 echo "Packaging macOS artifact..."
@@ -43,7 +49,13 @@ ditto -c -k --keepParent "$BUILD_DIR/macos/${APP_NAME}.app" "$DIST_DIR/${APP_NAM
 echo "Packaging Linux artifact..."
 (
   cd "$BUILD_DIR/linux"
-  zip -q -r "$DIST_DIR/${APP_NAME}-linux-x86_64.zip" "${APP_NAME}.x86_64" "${APP_NAME}.pck"
+  linux_bin="$(find . -maxdepth 1 -name '*.x86_64' -print | head -n 1)"
+  linux_pck="$(find . -maxdepth 1 -name '*.pck' -print | head -n 1)"
+  if [[ -z "$linux_bin" || -z "$linux_pck" ]]; then
+    echo "Linux package files not found in $BUILD_DIR/linux" >&2
+    exit 1
+  fi
+  zip -q -r "$DIST_DIR/${APP_NAME}-linux-x86_64.zip" "${linux_bin#./}" "${linux_pck#./}"
 )
 
 echo "Artifacts written to $DIST_DIR"
