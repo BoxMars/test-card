@@ -4,24 +4,34 @@ const GAME_SCENE := "res://scenes/game.tscn"
 const SETTINGS_SCENE := "res://scenes/settings.tscn"
 const UI_SKIN := preload("res://scripts/ui_skin.gd")
 
+@onready var name_input: LineEdit = %NameInput
+
 
 func _ready() -> void:
 	_apply_ui_skin()
+	_load_user_name()
 	$CenterBox/Panel/VBox/StartButton.pressed.connect(_on_start_button_pressed)
 	$CenterBox/Panel/VBox/SettingsButton.pressed.connect(_on_settings_button_pressed)
 	$CenterBox/Panel/VBox/QuitButton.pressed.connect(_on_quit_button_pressed)
+	name_input.text_submitted.connect(_on_name_submitted)
+	name_input.focus_exited.connect(_commit_user_name)
 
 
 func _apply_ui_skin() -> void:
 	UI_SKIN.apply_panel($CenterBox/Panel, "warm")
 	UI_SKIN.apply_label($CenterBox/Panel/VBox/Title, "title")
-	UI_SKIN.apply_label($CenterBox/Panel/VBox/Subtitle, "muted")
+	var subtitle := $CenterBox/Panel/VBox.get_node_or_null("Subtitle")
+	if subtitle != null:
+		UI_SKIN.apply_label(subtitle, "muted")
+	UI_SKIN.apply_label($CenterBox/Panel/VBox/NameLabel, "muted")
+	UI_SKIN.apply_line_edit(name_input, "warm")
 	UI_SKIN.apply_button($CenterBox/Panel/VBox/StartButton, "primary")
 	UI_SKIN.apply_button($CenterBox/Panel/VBox/SettingsButton, "secondary")
 	UI_SKIN.apply_button($CenterBox/Panel/VBox/QuitButton, "danger")
 
 
 func _on_start_button_pressed() -> void:
+	_commit_user_name()
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 
@@ -30,4 +40,25 @@ func _on_settings_button_pressed() -> void:
 
 
 func _on_quit_button_pressed() -> void:
+	_commit_user_name()
 	get_tree().quit()
+
+
+func _load_user_name() -> void:
+	var settings := get_node_or_null("/root/UserSettings")
+	if settings == null:
+		return
+	name_input.text = String(settings.get_user_name())
+	name_input.caret_column = name_input.text.length()
+
+
+func _on_name_submitted(_text: String) -> void:
+	_commit_user_name()
+
+
+func _commit_user_name() -> void:
+	var settings := get_node_or_null("/root/UserSettings")
+	if settings == null:
+		return
+	settings.set_user_name(name_input.text)
+	name_input.text = String(settings.get_user_name())

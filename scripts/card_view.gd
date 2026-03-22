@@ -16,6 +16,39 @@ var _lift_root: PanelContainer
 var _content_root: MarginContainer
 
 const SELECTED_LIFT := -12.0
+const CORNER_RADIUS := 8.0
+const RAINBOW_OVERLAY_SHADER_BODY := """
+
+uniform float corner_radius_px = 8.0;
+uniform vec2 rect_size_px = vec2(74.0, 108.0);
+
+void fragment() {
+	vec4 color = texture(TEXTURE, UV) * COLOR;
+	vec2 pos = UV * rect_size_px;
+	vec2 size = rect_size_px;
+	float radius = min(corner_radius_px, min(size.x, size.y) * 0.5);
+
+	if (pos.x < radius && pos.y < radius) {
+		if (distance(pos, vec2(radius, radius)) > radius) {
+			discard;
+		}
+	} else if (pos.x > size.x - radius && pos.y < radius) {
+		if (distance(pos, vec2(size.x - radius, radius)) > radius) {
+			discard;
+		}
+	} else if (pos.x < radius && pos.y > size.y - radius) {
+		if (distance(pos, vec2(radius, size.y - radius)) > radius) {
+			discard;
+		}
+	} else if (pos.x > size.x - radius && pos.y > size.y - radius) {
+		if (distance(pos, vec2(size.x - radius, size.y - radius)) > radius) {
+			discard;
+		}
+	}
+
+	COLOR = color;
+}
+"""
 
 
 func setup(card_id: String, card_text: String) -> void:
@@ -151,6 +184,7 @@ func _build_atlas_face(card_text: String) -> void:
 	texture_rect.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	texture_rect.stretch_mode = TextureRect.STRETCH_SCALE
 	texture_rect.texture = _get_atlas_texture(card_text)
+	texture_rect.material = _build_rounded_overlay_material(false)
 	_content_root.add_child(texture_rect)
 
 	if card_text == "皇帝牌" or card_text == "♥4":
@@ -160,10 +194,10 @@ func _build_atlas_face(card_text: String) -> void:
 func _build_panel_style(card_color: Color, hovered: bool) -> StyleBoxFlat:
 	var style: StyleBoxFlat = StyleBoxFlat.new()
 	style.bg_color = Color(0.982, 0.973, 0.937)
-	style.corner_radius_top_left = 8
-	style.corner_radius_top_right = 8
-	style.corner_radius_bottom_right = 8
-	style.corner_radius_bottom_left = 8
+	style.corner_radius_top_left = int(CORNER_RADIUS)
+	style.corner_radius_top_right = int(CORNER_RADIUS)
+	style.corner_radius_bottom_right = int(CORNER_RADIUS)
+	style.corner_radius_bottom_left = int(CORNER_RADIUS)
 	style.border_width_left = 2
 	style.border_width_top = 2
 	style.border_width_right = 2
@@ -186,10 +220,10 @@ func _build_selected_panel_style(card_color: Color, hovered: bool) -> StyleBoxFl
 		style.bg_color = Color(1, 0.983, 0.925)
 	else:
 		style.bg_color = Color(0.995, 0.976, 0.89)
-	style.corner_radius_top_left = 8
-	style.corner_radius_top_right = 8
-	style.corner_radius_bottom_right = 8
-	style.corner_radius_bottom_left = 8
+	style.corner_radius_top_left = int(CORNER_RADIUS)
+	style.corner_radius_top_right = int(CORNER_RADIUS)
+	style.corner_radius_bottom_right = int(CORNER_RADIUS)
+	style.corner_radius_bottom_left = int(CORNER_RADIUS)
 	style.border_width_left = 3
 	style.border_width_top = 3
 	style.border_width_right = 3
@@ -231,6 +265,7 @@ func _add_rainbow_special_overlay() -> void:
 	gradient_texture.fill_from = Vector2(0, 0)
 	gradient_texture.fill_to = Vector2(1, 1)
 	rainbow_overlay.texture = gradient_texture
+	rainbow_overlay.material = _build_rounded_overlay_material(false)
 	_content_root.add_child(rainbow_overlay)
 
 	var glow_overlay := TextureRect.new()
@@ -240,9 +275,22 @@ func _add_rainbow_special_overlay() -> void:
 	glow_overlay.stretch_mode = TextureRect.STRETCH_SCALE
 	glow_overlay.modulate = Color(1, 1, 1, 0.46)
 	glow_overlay.texture = gradient_texture
-	glow_overlay.material = CanvasItemMaterial.new()
-	glow_overlay.material.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	glow_overlay.material = _build_rounded_overlay_material(true)
 	_content_root.add_child(glow_overlay)
+
+
+func _build_rounded_overlay_material(additive: bool = false) -> ShaderMaterial:
+	var material: ShaderMaterial = ShaderMaterial.new()
+	var shader: Shader = Shader.new()
+	if additive:
+		shader.code = "shader_type canvas_item;\nrender_mode blend_add;\n" + RAINBOW_OVERLAY_SHADER_BODY
+	else:
+		shader.code = "shader_type canvas_item;\n" + RAINBOW_OVERLAY_SHADER_BODY
+	material.shader = shader
+	material.set_shader_parameter("corner_radius_px", CORNER_RADIUS)
+	material.set_shader_parameter("rect_size_px", custom_minimum_size)
+	material.resource_local_to_scene = true
+	return material
 
 
 func set_selected(selected: bool, animated: bool = true) -> void:
@@ -342,7 +390,7 @@ func _get_atlas_texture(card_text: String) -> Texture2D:
 
 
 func _get_card_size_for_mode(card_text: String) -> Vector2:
-	var default_size: Vector2 = Vector2(66, 96)
+	var default_size: Vector2 = Vector2(74, 108)
 	var settings: Node = _get_user_settings()
 	if settings == null or String(settings.get_render_mode()) != "atlas":
 		return default_size
@@ -355,7 +403,7 @@ func _get_card_size_for_mode(card_text: String) -> Vector2:
 	if texture_size.x <= 0 or texture_size.y <= 0:
 		return default_size
 
-	var target_height: float = 104.0
+	var target_height: float = 116.0
 	var target_width: float = round(target_height * texture_size.x / texture_size.y)
 	return Vector2(target_width, target_height)
 

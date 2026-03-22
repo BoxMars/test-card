@@ -10,6 +10,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_su2te")
+metadata/_edit_horizontal_guides_ = [865.0, 840.0, 814.0, 786.0, 614.0, 300.0, 453.0, 408.0, 256.0]
+metadata/_edit_vertical_guides_ = [64.0, 35.0, 154.0, 1389.0, 1440.0]
 
 [node name="Background" type="ColorRect" parent="." unique_id=1585379135]
 layout_mode = 1
@@ -66,7 +68,7 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 12
 
-[node name="TopSafe" type="Control" parent="Margin/Root"]
+[node name="TopSafe" type="Control" parent="Margin/Root" unique_id=27400975]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 
@@ -108,33 +110,42 @@ custom_minimum_size = Vector2(0, 348)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="LeftColumn" type="VBoxContainer" parent="Margin/Root/TableArea" unique_id=1196208176]
+[node name="LeftColumn" type="Control" parent="Margin/Root/TableArea" unique_id=1196208176]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -150.0
-offset_right = 332.0
-offset_bottom = 150.0
+offset_top = -154.0
+offset_right = 372.0
+offset_bottom = 154.0
 grow_vertical = 2
-theme_override_constants/separation = 18
-alignment = 1
 
 [node name="Opponent2" type="PanelContainer" parent="Margin/Root/TableArea/LeftColumn" unique_id=298191865]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(312, 136)
-layout_mode = 2
+custom_minimum_size = Vector2(372, 136)
+layout_mode = 1
+offset_top = 9.0
+offset_right = 372.0
+offset_bottom = 145.0
 
-[node name="Row" type="HBoxContainer" parent="Margin/Root/TableArea/LeftColumn/Opponent2" unique_id=1002748825]
+[node name="Row" type="Control" parent="Margin/Root/TableArea/LeftColumn/Opponent2" unique_id=1002748825]
 layout_mode = 2
-theme_override_constants/separation = 8
-alignment = 0
 
 [node name="Info" type="VBoxContainer" parent="Margin/Root/TableArea/LeftColumn/Opponent2/Row" unique_id=1348222336]
 custom_minimum_size = Vector2(112, 0)
-layout_mode = 2
+layout_mode = 1
+offset_right = 112.0
+offset_bottom = 136.0
 theme_override_constants/separation = 8
 alignment = 1
+
+[node name="TurnBadge" type="Label" parent="Margin/Root/TableArea/LeftColumn/Opponent2/Row/Info" unique_id=1100000011]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="RoleBadge" type="Label" parent="Margin/Root/TableArea/LeftColumn/Opponent2/Row/Info" unique_id=1100000001]
+layout_mode = 2
+horizontal_alignment = 1
 
 [node name="Avatar" type="Label" parent="Margin/Root/TableArea/LeftColumn/Opponent2/Row/Info" unique_id=2100506898]
 layout_mode = 2
@@ -147,38 +158,64 @@ layout_mode = 2
 text = "玩家 2"
 horizontal_alignment = 1
 
-[node name="RoleBadge" type="Label" parent="Margin/Root/TableArea/LeftColumn/Opponent2/Row/Info" unique_id=1100000001]
-layout_mode = 2
-text = "待机"
-horizontal_alignment = 1
-
-[node name="Count" type="Label" parent="Margin/Root/TableArea/LeftColumn/Opponent2/Row/Info" unique_id=45377458]
-layout_mode = 2
-text = "手牌数：0"
-horizontal_alignment = 1
-
 [node name="PlayRow" type="HBoxContainer" parent="Margin/Root/TableArea/LeftColumn/Opponent2/Row" unique_id=1746454088]
 clip_contents = true
 custom_minimum_size = Vector2(188, 64)
-layout_mode = 2
+layout_mode = 1
+offset_left = 118.0
+offset_top = 29.0
+offset_right = 306.0
+offset_bottom = 93.0
 theme_override_constants/separation = -30
-alignment = 0
+
+[node name="PassLabel" type="Label" parent="Margin/Root/TableArea/LeftColumn/Opponent2/Row" unique_id=1200000020]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 118.0
+offset_top = 77.0
+offset_right = 174.0
+offset_bottom = 109.0
+text = "不要"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Countdown" type="Label" parent="Margin/Root/TableArea/LeftColumn/Opponent2/Row" unique_id=1200000011]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 1
+offset_left = 118.0
+offset_top = 29.0
+offset_right = 174.0
+offset_bottom = 165.0
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Opponent3" type="PanelContainer" parent="Margin/Root/TableArea/LeftColumn" unique_id=600722458]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(312, 136)
-layout_mode = 2
+custom_minimum_size = Vector2(372, 136)
+layout_mode = 1
+offset_top = 163.0
+offset_right = 372.0
+offset_bottom = 299.0
 
-[node name="Row" type="HBoxContainer" parent="Margin/Root/TableArea/LeftColumn/Opponent3" unique_id=2100751271]
+[node name="Row" type="Control" parent="Margin/Root/TableArea/LeftColumn/Opponent3" unique_id=2100751271]
 layout_mode = 2
-theme_override_constants/separation = 8
-alignment = 0
 
 [node name="Info" type="VBoxContainer" parent="Margin/Root/TableArea/LeftColumn/Opponent3/Row" unique_id=633770809]
 custom_minimum_size = Vector2(112, 0)
-layout_mode = 2
+layout_mode = 1
+offset_right = 112.0
+offset_bottom = 136.0
 theme_override_constants/separation = 8
 alignment = 1
+
+[node name="TurnBadge" type="Label" parent="Margin/Root/TableArea/LeftColumn/Opponent3/Row/Info" unique_id=1100000012]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="RoleBadge" type="Label" parent="Margin/Root/TableArea/LeftColumn/Opponent3/Row/Info" unique_id=1100000002]
+layout_mode = 2
+horizontal_alignment = 1
 
 [node name="Avatar" type="Label" parent="Margin/Root/TableArea/LeftColumn/Opponent3/Row/Info" unique_id=1210822872]
 layout_mode = 2
@@ -191,24 +228,37 @@ layout_mode = 2
 text = "玩家 3"
 horizontal_alignment = 1
 
-[node name="RoleBadge" type="Label" parent="Margin/Root/TableArea/LeftColumn/Opponent3/Row/Info" unique_id=1100000002]
-layout_mode = 2
-text = "待机"
-horizontal_alignment = 1
-
-[node name="Count" type="Label" parent="Margin/Root/TableArea/LeftColumn/Opponent3/Row/Info" unique_id=704804126]
-layout_mode = 2
-text = "手牌数：0"
-horizontal_alignment = 1
-
 [node name="PlayRow" type="HBoxContainer" parent="Margin/Root/TableArea/LeftColumn/Opponent3/Row" unique_id=1752719976]
 clip_contents = true
 custom_minimum_size = Vector2(188, 64)
-layout_mode = 2
+layout_mode = 1
+offset_left = 118.0
+offset_top = 27.0
+offset_right = 306.0
+offset_bottom = 91.0
 theme_override_constants/separation = -30
-alignment = 0
 
-[node name="RightColumn" type="VBoxContainer" parent="Margin/Root/TableArea" unique_id=1810522588]
+[node name="PassLabel" type="Label" parent="Margin/Root/TableArea/LeftColumn/Opponent3/Row" unique_id=1200000021]
+layout_mode = 1
+offset_left = 118.0
+offset_top = 67.0
+offset_right = 174.0
+offset_bottom = 99.0
+text = "不要"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Countdown" type="Label" parent="Margin/Root/TableArea/LeftColumn/Opponent3/Row" unique_id=1200000012]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 1
+offset_left = 118.0
+offset_top = 27.0
+offset_right = 174.0
+offset_bottom = 163.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RightColumn" type="Control" parent="Margin/Root/TableArea" unique_id=1810522588]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 6
@@ -216,36 +266,70 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -332.0
-offset_top = -150.0
-offset_bottom = 150.0
+offset_left = -372.0
+offset_top = -154.0
+offset_bottom = 154.0
 grow_horizontal = 0
 grow_vertical = 2
-theme_override_constants/separation = 18
-alignment = 1
 
 [node name="Opponent4" type="PanelContainer" parent="Margin/Root/TableArea/RightColumn" unique_id=986849963]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(312, 136)
-layout_mode = 2
+custom_minimum_size = Vector2(372, 136)
+layout_mode = 1
+offset_top = 9.0
+offset_right = 372.0
+offset_bottom = 145.0
 
-[node name="Row" type="HBoxContainer" parent="Margin/Root/TableArea/RightColumn/Opponent4" unique_id=1431427792]
+[node name="Row" type="Control" parent="Margin/Root/TableArea/RightColumn/Opponent4" unique_id=1431427792]
 layout_mode = 2
-theme_override_constants/separation = 8
-alignment = 2
 
 [node name="PlayRow" type="HBoxContainer" parent="Margin/Root/TableArea/RightColumn/Opponent4/Row" unique_id=680604223]
 clip_contents = true
 custom_minimum_size = Vector2(188, 64)
-layout_mode = 2
+layout_mode = 1
+offset_left = 38.0
+offset_top = 29.0
+offset_right = 226.0
+offset_bottom = 93.0
 theme_override_constants/separation = -30
 alignment = 2
 
+[node name="PassLabel" type="Label" parent="Margin/Root/TableArea/RightColumn/Opponent4/Row" unique_id=1200000022]
+layout_mode = 1
+offset_left = 190.0
+offset_top = 69.0
+offset_right = 246.0
+offset_bottom = 101.0
+text = "不要"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Countdown" type="Label" parent="Margin/Root/TableArea/RightColumn/Opponent4/Row" unique_id=1200000013]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 1
+offset_left = 198.0
+offset_top = 29.0
+offset_right = 254.0
+offset_bottom = 165.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Info" type="VBoxContainer" parent="Margin/Root/TableArea/RightColumn/Opponent4/Row" unique_id=2086498476]
 custom_minimum_size = Vector2(112, 0)
-layout_mode = 2
+layout_mode = 1
+offset_left = 260.0
+offset_right = 372.0
+offset_bottom = 136.0
 theme_override_constants/separation = 8
 alignment = 1
+
+[node name="TurnBadge" type="Label" parent="Margin/Root/TableArea/RightColumn/Opponent4/Row/Info" unique_id=1100000013]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="RoleBadge" type="Label" parent="Margin/Root/TableArea/RightColumn/Opponent4/Row/Info" unique_id=1100000003]
+layout_mode = 2
+horizontal_alignment = 1
 
 [node name="Avatar" type="Label" parent="Margin/Root/TableArea/RightColumn/Opponent4/Row/Info" unique_id=820688863]
 layout_mode = 2
@@ -258,38 +342,64 @@ layout_mode = 2
 text = "玩家 4"
 horizontal_alignment = 1
 
-[node name="RoleBadge" type="Label" parent="Margin/Root/TableArea/RightColumn/Opponent4/Row/Info" unique_id=1100000003]
-layout_mode = 2
-text = "待机"
-horizontal_alignment = 1
-
-[node name="Count" type="Label" parent="Margin/Root/TableArea/RightColumn/Opponent4/Row/Info" unique_id=389744531]
-layout_mode = 2
-text = "手牌数：0"
-horizontal_alignment = 1
-
 [node name="Opponent5" type="PanelContainer" parent="Margin/Root/TableArea/RightColumn" unique_id=451077584]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(312, 136)
-layout_mode = 2
+custom_minimum_size = Vector2(372, 136)
+layout_mode = 1
+offset_top = 163.0
+offset_right = 372.0
+offset_bottom = 299.0
 
-[node name="Row" type="HBoxContainer" parent="Margin/Root/TableArea/RightColumn/Opponent5" unique_id=1688901605]
+[node name="Row" type="Control" parent="Margin/Root/TableArea/RightColumn/Opponent5" unique_id=1688901605]
 layout_mode = 2
-theme_override_constants/separation = 8
-alignment = 2
 
 [node name="PlayRow" type="HBoxContainer" parent="Margin/Root/TableArea/RightColumn/Opponent5/Row" unique_id=326506595]
 clip_contents = true
 custom_minimum_size = Vector2(188, 64)
-layout_mode = 2
+layout_mode = 1
+offset_left = 38.0
+offset_top = 27.0
+offset_right = 226.0
+offset_bottom = 91.0
 theme_override_constants/separation = -30
 alignment = 2
 
+[node name="PassLabel" type="Label" parent="Margin/Root/TableArea/RightColumn/Opponent5/Row" unique_id=1200000023]
+layout_mode = 1
+offset_left = 190.0
+offset_top = 67.0
+offset_right = 246.0
+offset_bottom = 99.0
+text = "不要"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Countdown" type="Label" parent="Margin/Root/TableArea/RightColumn/Opponent5/Row" unique_id=1200000014]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 1
+offset_left = 198.0
+offset_top = 27.0
+offset_right = 254.0
+offset_bottom = 163.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Info" type="VBoxContainer" parent="Margin/Root/TableArea/RightColumn/Opponent5/Row" unique_id=1345334508]
 custom_minimum_size = Vector2(112, 0)
-layout_mode = 2
+layout_mode = 1
+offset_left = 260.0
+offset_right = 372.0
+offset_bottom = 136.0
 theme_override_constants/separation = 8
 alignment = 1
+
+[node name="TurnBadge" type="Label" parent="Margin/Root/TableArea/RightColumn/Opponent5/Row/Info" unique_id=1100000014]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="RoleBadge" type="Label" parent="Margin/Root/TableArea/RightColumn/Opponent5/Row/Info" unique_id=1100000004]
+layout_mode = 2
+horizontal_alignment = 1
 
 [node name="Avatar" type="Label" parent="Margin/Root/TableArea/RightColumn/Opponent5/Row/Info" unique_id=1511027325]
 layout_mode = 2
@@ -302,21 +412,11 @@ layout_mode = 2
 text = "玩家 5"
 horizontal_alignment = 1
 
-[node name="RoleBadge" type="Label" parent="Margin/Root/TableArea/RightColumn/Opponent5/Row/Info" unique_id=1100000004]
-layout_mode = 2
-text = "待机"
-horizontal_alignment = 1
-
-[node name="Count" type="Label" parent="Margin/Root/TableArea/RightColumn/Opponent5/Row/Info" unique_id=871762375]
-layout_mode = 2
-text = "手牌数：0"
-horizontal_alignment = 1
-
 [node name="LeftTopPlayFixed" type="HBoxContainer" parent="Margin/Root/TableArea" unique_id=1667125974]
 unique_name_in_owner = true
 visible = false
-clip_contents = true
 z_index = 4
+clip_contents = true
 layout_mode = 1
 offset_left = 214.0
 offset_top = 118.0
@@ -327,8 +427,8 @@ theme_override_constants/separation = -30
 [node name="LeftBottomPlayFixed" type="HBoxContainer" parent="Margin/Root/TableArea" unique_id=925054640]
 unique_name_in_owner = true
 visible = false
-clip_contents = true
 z_index = 4
+clip_contents = true
 layout_mode = 1
 offset_left = 214.0
 offset_top = 274.0
@@ -339,8 +439,8 @@ theme_override_constants/separation = -30
 [node name="RightTopPlayFixed" type="HBoxContainer" parent="Margin/Root/TableArea" unique_id=1232431040]
 unique_name_in_owner = true
 visible = false
-clip_contents = true
 z_index = 4
+clip_contents = true
 layout_mode = 1
 offset_left = 990.0
 offset_top = 118.0
@@ -352,8 +452,8 @@ alignment = 2
 [node name="RightBottomPlayFixed" type="HBoxContainer" parent="Margin/Root/TableArea" unique_id=1513236558]
 unique_name_in_owner = true
 visible = false
-clip_contents = true
 z_index = 4
+clip_contents = true
 layout_mode = 1
 offset_left = 990.0
 offset_top = 274.0
@@ -362,175 +462,233 @@ offset_bottom = 338.0
 theme_override_constants/separation = -30
 alignment = 2
 
-[node name="CenterInfo" type="PanelContainer" parent="Margin/Root/TableArea" unique_id=1550944234]
+[node name="PlayerHandPanel" type="PanelContainer" parent="Margin/Root" unique_id=1545938571]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+
+[node name="HandVBox" type="VBoxContainer" parent="Margin/Root/PlayerHandPanel" unique_id=755960774]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="PlayerMetaRow" type="Control" parent="Margin/Root/PlayerHandPanel/HandVBox" unique_id=1200000001]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PlayerPlaySlot" type="Control" parent="Margin/Root/PlayerHandPanel/HandVBox" unique_id=545193512]
+custom_minimum_size = Vector2(0, 68)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PlayerPlayRow" type="Control" parent="Margin/Root/PlayerHandPanel/HandVBox/PlayerPlaySlot" unique_id=545193513]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PlayerPlayCards" type="HBoxContainer" parent="Margin/Root/PlayerHandPanel/HandVBox/PlayerPlaySlot/PlayerPlayRow" unique_id=280618539]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(440, 68)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -118.0
-offset_top = -64.0
-offset_right = 118.0
-offset_bottom = 64.0
+offset_left = -216.0
+offset_top = -66.0
+offset_right = 224.0
+offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="VBox" type="VBoxContainer" parent="Margin/Root/TableArea/CenterInfo" unique_id=652600909]
-layout_mode = 2
-theme_override_constants/separation = 8
-alignment = 1
-
-[node name="CenterTitle" type="Label" parent="Margin/Root/TableArea/CenterInfo/VBox" unique_id=1760106914]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "本轮信息"
-horizontal_alignment = 1
-
-[node name="CenterHint" type="Label" parent="Margin/Root/TableArea/CenterInfo/VBox" unique_id=790393384]
-unique_name_in_owner = true
-layout_mode = 2
-text = "当前展示玩家 1 手牌"
-horizontal_alignment = 1
-
-[node name="CurrentTurnLabel" type="Label" parent="Margin/Root/TableArea/CenterInfo/VBox" unique_id=444924949]
-unique_name_in_owner = true
-layout_mode = 2
-text = "当前出牌：玩家 1"
-horizontal_alignment = 1
-
-[node name="EmperorLabel" type="Label" parent="Margin/Root/TableArea/CenterInfo/VBox" unique_id=1815160632]
-unique_name_in_owner = true
-layout_mode = 2
-text = "皇帝：待定"
-horizontal_alignment = 1
-
-[node name="LastPlayLabel" type="Label" parent="Margin/Root/TableArea/CenterInfo/VBox" unique_id=386120037]
-unique_name_in_owner = true
-layout_mode = 2
-text = "上家出牌：尚未开始"
-horizontal_alignment = 1
-
-[node name="PlayerHandPanel" type="PanelContainer" parent="Margin/Root" unique_id=1545938571]
-custom_minimum_size = Vector2(0, 300)
-layout_mode = 2
-
-[node name="HandVBox" type="VBoxContainer" parent="Margin/Root/PlayerHandPanel" unique_id=755960774]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 12.0
-offset_top = 10.0
-offset_right = -12.0
-offset_bottom = 64.0
-grow_horizontal = 2
-theme_override_constants/separation = 6
-
-[node name="PlayerLabel" type="Label" parent="Margin/Root/PlayerHandPanel/HandVBox" unique_id=809461924]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "当前玩家：玩家 1"
-
-[node name="PlayerRoleBadge" type="Label" parent="Margin/Root/PlayerHandPanel/HandVBox" unique_id=1100000005]
-unique_name_in_owner = true
-layout_mode = 2
-text = "待机"
-
-[node name="HandMeta" type="Label" parent="Margin/Root/PlayerHandPanel/HandVBox" unique_id=421048286]
-unique_name_in_owner = true
-layout_mode = 2
-text = "手牌数：0"
-
-[node name="PlayerPlaySlot" type="Control" parent="Margin/Root/PlayerHandPanel" unique_id=545193512]
-custom_minimum_size = Vector2(0, 68)
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 68.0
-offset_bottom = 136.0
-grow_horizontal = 2
-mouse_filter = 2
-
-[node name="PlayerPlayRow" type="CenterContainer" parent="Margin/Root/PlayerHandPanel/PlayerPlaySlot" unique_id=545193513]
-unique_name_in_owner = true
-z_index = 6
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="PlayerPlayCards" type="HBoxContainer" parent="Margin/Root/PlayerHandPanel/PlayerPlaySlot/PlayerPlayRow" unique_id=280618539]
-unique_name_in_owner = true
-clip_contents = true
-custom_minimum_size = Vector2(440, 68)
-layout_mode = 2
 theme_override_constants/separation = -30
 alignment = 1
 
-[node name="PlayButtonRow" type="CenterContainer" parent="Margin/Root/PlayerHandPanel" unique_id=688699718]
+[node name="PlayerCountdown" type="Label" parent="Margin/Root/PlayerHandPanel/HandVBox/PlayerPlaySlot/PlayerPlayRow" unique_id=1200000015]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -798.0
+offset_top = -82.0
+offset_right = -742.0
+offset_bottom = -14.0
+grow_horizontal = 0
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayButtonSlot" type="Control" parent="Margin/Root/PlayerHandPanel/HandVBox" unique_id=1200000019]
 custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="PlayButtonRow" type="Control" parent="Margin/Root/PlayerHandPanel/HandVBox/PlayButtonSlot" unique_id=688699718]
+custom_minimum_size = Vector2(384, 40)
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 138.0
-offset_bottom = 178.0
-grow_horizontal = 2
-
-[node name="PlayActions" type="HBoxContainer" parent="Margin/Root/PlayerHandPanel/PlayButtonRow" unique_id=645116267]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="PassButton" type="Button" parent="Margin/Root/PlayerHandPanel/PlayButtonRow/PlayActions" unique_id=1828734871]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(110, 36)
-layout_mode = 2
-text = "不要"
-
-[node name="PlayButton" type="Button" parent="Margin/Root/PlayerHandPanel/PlayButtonRow/PlayActions" unique_id=216879891]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(144, 36)
-layout_mode = 2
-text = "出牌"
-
-[node name="HintButton" type="Button" parent="Margin/Root/PlayerHandPanel/PlayButtonRow/PlayActions" unique_id=302350349]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(110, 36)
-layout_mode = 2
-text = "提示"
-
-[node name="HandRows" type="VBoxContainer" parent="Margin/Root/PlayerHandPanel" unique_id=39043531]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 186.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.0
+offset_top = -38.0
+offset_right = 192.0
+offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="PassButton" type="Button" parent="Margin/Root/PlayerHandPanel/HandVBox/PlayButtonSlot/PlayButtonRow" unique_id=1828734871]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 36)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.0
+offset_top = -18.0
+offset_right = -82.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "不要"
+
+[node name="PlayButton" type="Button" parent="Margin/Root/PlayerHandPanel/HandVBox/PlayButtonSlot/PlayButtonRow" unique_id=216879891]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(144, 36)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -72.0
+offset_top = -18.0
+offset_right = 72.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "出牌"
+
+[node name="HintButton" type="Button" parent="Margin/Root/PlayerHandPanel/HandVBox/PlayButtonSlot/PlayButtonRow" unique_id=302350349]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 36)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 82.0
+offset_top = -18.0
+offset_right = 192.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "提示"
+
+[node name="HandRows" type="VBoxContainer" parent="Margin/Root/PlayerHandPanel/HandVBox" unique_id=39043531]
+layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/separation = 8
 
-[node name="TopHandRow" type="HBoxContainer" parent="Margin/Root/PlayerHandPanel/HandRows" unique_id=871981539]
+[node name="TopHandRow" type="HBoxContainer" parent="Margin/Root/PlayerHandPanel/HandVBox/HandRows" unique_id=871981539]
+custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
-custom_minimum_size = Vector2(0, 56)
 theme_override_constants/separation = -18
 alignment = 1
 
-[node name="BottomHandRow" type="HBoxContainer" parent="Margin/Root/PlayerHandPanel/HandRows" unique_id=1107882771]
+[node name="BottomHandRow" type="HBoxContainer" parent="Margin/Root/PlayerHandPanel/HandVBox/HandRows" unique_id=1107882771]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
-custom_minimum_size = Vector2(0, 56)
 theme_override_constants/separation = -18
 alignment = 1
 
-[node name="BottomSafe" type="Control" parent="Margin/Root"]
+[node name="BottomInfoRow" type="Control" parent="Margin/Root/PlayerHandPanel/HandVBox" unique_id=1200000003]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+
+[node name="PlayerIdentityBox" type="Control" parent="Margin/Root/PlayerHandPanel/HandVBox/BottomInfoRow" unique_id=1200000006]
+custom_minimum_size = Vector2(112, 0)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1532.0
+offset_top = -106.0
+offset_right = -1420.0
+offset_bottom = -46.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="PlayerRoleIcon" type="Label" parent="Margin/Root/PlayerHandPanel/HandVBox/BottomInfoRow/PlayerIdentityBox" unique_id=1200000017]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -28.0
+offset_top = -34.0
+offset_right = 28.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 44
+horizontal_alignment = 1
+
+[node name="PlayerLabel" type="Label" parent="Margin/Root/PlayerHandPanel/HandVBox/BottomInfoRow/PlayerIdentityBox" unique_id=809461924]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -56.0
+offset_top = 12.0
+offset_right = 56.0
+offset_bottom = 36.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "你"
+horizontal_alignment = 1
+
+[node name="PlayerCardCount" type="Label" parent="Margin/Root/PlayerHandPanel/HandVBox/BottomInfoRow" unique_id=1200000004]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -142.0
+offset_top = -26.0
+offset_right = -30.0
+offset_bottom = 34.0
+grow_horizontal = 0
+text = "剩余 0 张"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="BottomSafe" type="Control" parent="Margin/Root" unique_id=1926319145]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
 [connection signal="pressed" from="Margin/Root/Header/Actions/DealButton" to="." method="_on_deal_button_pressed"]
 [connection signal="pressed" from="Margin/Root/Header/Actions/MenuButton" to="." method="_on_menu_button_pressed"]
-[connection signal="pressed" from="Margin/Root/PlayerHandPanel/PlayButtonRow/PlayActions/PassButton" to="." method="_on_pass_button_pressed"]
-[connection signal="pressed" from="Margin/Root/PlayerHandPanel/PlayButtonRow/PlayActions/PlayButton" to="." method="_on_play_button_pressed"]
-[connection signal="pressed" from="Margin/Root/PlayerHandPanel/PlayButtonRow/PlayActions/HintButton" to="." method="_on_hint_button_pressed"]
+[connection signal="pressed" from="Margin/Root/PlayerHandPanel/HandVBox/PlayButtonSlot/PlayButtonRow/PassButton" to="." method="_on_pass_button_pressed"]
+[connection signal="pressed" from="Margin/Root/PlayerHandPanel/HandVBox/PlayButtonSlot/PlayButtonRow/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="Margin/Root/PlayerHandPanel/HandVBox/PlayButtonSlot/PlayButtonRow/HintButton" to="." method="_on_hint_button_pressed"]

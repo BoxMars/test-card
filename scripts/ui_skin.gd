@@ -116,6 +116,30 @@ static func apply_button(button: Button, variant: String = "primary") -> void:
 	button.add_theme_font_size_override("font_size", 18)
 
 
+static func apply_line_edit(line_edit: LineEdit, variant: String = "default") -> void:
+	var bg := PANEL_SOFT
+	var border := BORDER_GREEN
+	var font_color := TEXT_MAIN
+	var placeholder_color := TEXT_MUTED
+
+	match variant:
+		"warm":
+			bg = Color("2a2219")
+			border = ACCENT_GOLD
+		"soft":
+			bg = PANEL_SOFT
+			border = BORDER_GREEN
+
+	line_edit.add_theme_stylebox_override("normal", make_panel_style(bg, border, 2, 12, 0.14))
+	line_edit.add_theme_stylebox_override("focus", make_panel_style(bg.lightened(0.05), ACCENT_GOLD, 3, 12, 0.18))
+	line_edit.add_theme_stylebox_override("read_only", make_panel_style(bg.darkened(0.08), border.darkened(0.12), 2, 12, 0.08))
+	line_edit.add_theme_color_override("font_color", font_color)
+	line_edit.add_theme_color_override("font_placeholder_color", placeholder_color)
+	line_edit.add_theme_color_override("caret_color", ACCENT_GOLD)
+	line_edit.add_theme_color_override("selection_color", Color(0.42, 0.66, 0.59, 0.45))
+	line_edit.add_theme_font_size_override("font_size", 18)
+
+
 static func apply_panel(panel: PanelContainer, variant: String = "default") -> void:
 	var bg := PANEL_DARK
 	var border := BORDER_LIGHT

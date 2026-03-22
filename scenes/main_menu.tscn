@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=4 uid="uid://ctv2a6cdhnn8i"]
+[gd_scene format=3 uid="uid://ctv2a6cdhnn8i"]
 
-[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_k7l87"]
+[ext_resource type="Script" uid="uid://clj6cxjd4w4sg" path="res://scripts/main_menu.gd" id="1_k7l87"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=900101094]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_k7l87")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=1754612380]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,24 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0509804, 0.109804, 0.105882, 1)
 
-[node name="TopGlow" type="ColorRect" parent="."]
-layout_mode = 1
-offset_right = 960.0
-offset_bottom = 220.0
-color = Color(0.901961, 0.458824, 0.219608, 0.12)
-
-[node name="BottomGlow" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -260.0
-grow_horizontal = 2
-grow_vertical = 0
-color = Color(0.105882, 0.447059, 0.376471, 0.22)
-
-[node name="CenterBox" type="CenterContainer" parent="."]
+[node name="CenterBox" type="CenterContainer" parent="." unique_id=874262416]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -45,39 +28,41 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="CenterBox"]
+[node name="Panel" type="PanelContainer" parent="CenterBox" unique_id=2011247531]
 layout_mode = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
 
-[node name="VBox" type="VBoxContainer" parent="CenterBox/Panel"]
+[node name="VBox" type="VBoxContainer" parent="CenterBox/Panel" unique_id=606040184]
 layout_mode = 2
 theme_override_constants/separation = 18
 
-[node name="Title" type="Label" parent="CenterBox/Panel/VBox"]
+[node name="Title" type="Label" parent="CenterBox/Panel/VBox" unique_id=1188066124]
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
-text = "卡牌游戏基础框架"
+text = "保皇"
 horizontal_alignment = 1
 
-[node name="Subtitle" type="Label" parent="CenterBox/Panel/VBox"]
+[node name="NameLabel" type="Label" parent="CenterBox/Panel/VBox" unique_id=365996469]
 layout_mode = 2
-text = "五名玩家使用四副含大小王扑克牌循环发牌"
-horizontal_alignment = 1
+text = "用户名"
 
-[node name="StartButton" type="Button" parent="CenterBox/Panel/VBox"]
+[node name="NameInput" type="LineEdit" parent="CenterBox/Panel/VBox" unique_id=314411247]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 48)
 layout_mode = 2
+placeholder_text = "输入要显示在牌桌上的名字"
+max_length = 16
+
+[node name="StartButton" type="Button" parent="CenterBox/Panel/VBox" unique_id=149958888]
 custom_minimum_size = Vector2(260, 56)
+layout_mode = 2
 text = "开始游戏"
 
-[node name="SettingsButton" type="Button" parent="CenterBox/Panel/VBox"]
-layout_mode = 2
+[node name="SettingsButton" type="Button" parent="CenterBox/Panel/VBox" unique_id=1417448546]
 custom_minimum_size = Vector2(260, 56)
+layout_mode = 2
 text = "设置"
 
-[node name="QuitButton" type="Button" parent="CenterBox/Panel/VBox"]
-layout_mode = 2
+[node name="QuitButton" type="Button" parent="CenterBox/Panel/VBox" unique_id=1728847932]
 custom_minimum_size = Vector2(260, 56)
+layout_mode = 2
 text = "退出"

@@ -9,20 +9,17 @@ const EMPEROR_CARD := "皇帝牌"
 const HUMAN_PLAYER_INDEX := 0
 
 @onready var status_label: Label = %StatusLabel
-@onready var center_hint: Label = %CenterHint
-@onready var current_turn_label: Label = %CurrentTurnLabel
-@onready var emperor_label: Label = %EmperorLabel
-@onready var last_play_label: Label = %LastPlayLabel
 @onready var player_label: Label = %PlayerLabel
-@onready var player_role_badge: Label = %PlayerRoleBadge
-@onready var hand_meta: Label = %HandMeta
-@onready var play_button_row: CenterContainer = $Margin/Root/PlayerHandPanel/PlayButtonRow
-@onready var play_actions: HBoxContainer = $Margin/Root/PlayerHandPanel/PlayButtonRow/PlayActions
+@onready var player_role_icon: Label = %PlayerRoleIcon
+@onready var player_card_count_label: Label = %PlayerCardCount
+@onready var player_countdown_label: Label = %PlayerCountdown
+@onready var play_button_row: Control = $Margin/Root/PlayerHandPanel/HandVBox/PlayButtonSlot/PlayButtonRow
+@onready var play_actions: Control = $Margin/Root/PlayerHandPanel/HandVBox/PlayButtonSlot/PlayButtonRow
 @onready var play_button: Button = %PlayButton
 @onready var hint_button: Button = %HintButton
 @onready var pass_button: Button = %PassButton
 @onready var player_play_cards: HBoxContainer = %PlayerPlayCards
-@onready var top_hand_row: HBoxContainer = $Margin/Root/PlayerHandPanel/HandRows/TopHandRow
+@onready var top_hand_row: HBoxContainer = $Margin/Root/PlayerHandPanel/HandVBox/HandRows/TopHandRow
 @onready var bottom_hand_row: HBoxContainer = %BottomHandRow
 @onready var background_rect: ColorRect = $Background
 @onready var table_glow: ColorRect = $TableGlow
@@ -54,7 +51,7 @@ const SUIT_ORDER := {
 
 const PLAYER_PLAY_SCALE := 0.66
 const OPPONENT_PLAY_SCALE := 0.5
-const SPECIAL_RANK_EXTRA_GAP := 12
+const SPECIAL_RANK_EXTRA_GAP := 0
 
 var players: Array = []
 var selected_card_ids: Array = []
@@ -70,6 +67,8 @@ var hint_cycle_signature := ""
 var hint_cycle_options: Array = []
 var hint_cycle_index := -1
 var suppress_ai_autorun := false
+var turn_deadline_msec := 0
+var turn_timeout_triggered := false
 
 
 func _ready() -> void:
@@ -77,12 +76,14 @@ func _ready() -> void:
 	_apply_ui_skin()
 	_apply_background_shader()
 	_deal_cards()
+	set_process(true)
 
 
 func _bind_player_nodes() -> void:
+	var user_name := _get_user_name()
 	players = [
 		{
-			"name": "你",
+			"name": user_name,
 			"type": "human",
 			"role": "",
 			"passed": false,
@@ -129,9 +130,11 @@ func _bind_player_nodes() -> void:
 			"panel": $Margin/Root/TableArea/RightColumn/Opponent5,
 			"count_side": "left",
 			"name_label": $Margin/Root/TableArea/RightColumn/Opponent5/Row/Info/Name,
+			"turn_label": $Margin/Root/TableArea/RightColumn/Opponent5/Row/Info/TurnBadge,
+			"countdown_label": $Margin/Root/TableArea/RightColumn/Opponent5/Row/Countdown,
 			"avatar_label": $Margin/Root/TableArea/RightColumn/Opponent5/Row/Info/Avatar,
 			"role_label": $Margin/Root/TableArea/RightColumn/Opponent5/Row/Info/RoleBadge,
-			"count_label": $Margin/Root/TableArea/RightColumn/Opponent5/Row/Info/Count,
+			"pass_label": $Margin/Root/TableArea/RightColumn/Opponent5/Row/PassLabel,
 			"play_container": $Margin/Root/TableArea/RightColumn/Opponent5/Row/PlayRow
 		},
 		{
@@ -139,9 +142,11 @@ func _bind_player_nodes() -> void:
 			"panel": $Margin/Root/TableArea/RightColumn/Opponent4,
 			"count_side": "left",
 			"name_label": $Margin/Root/TableArea/RightColumn/Opponent4/Row/Info/Name,
+			"turn_label": $Margin/Root/TableArea/RightColumn/Opponent4/Row/Info/TurnBadge,
+			"countdown_label": $Margin/Root/TableArea/RightColumn/Opponent4/Row/Countdown,
 			"avatar_label": $Margin/Root/TableArea/RightColumn/Opponent4/Row/Info/Avatar,
 			"role_label": $Margin/Root/TableArea/RightColumn/Opponent4/Row/Info/RoleBadge,
-			"count_label": $Margin/Root/TableArea/RightColumn/Opponent4/Row/Info/Count,
+			"pass_label": $Margin/Root/TableArea/RightColumn/Opponent4/Row/PassLabel,
 			"play_container": $Margin/Root/TableArea/RightColumn/Opponent4/Row/PlayRow
 		},
 		{
@@ -149,9 +154,11 @@ func _bind_player_nodes() -> void:
 			"panel": $Margin/Root/TableArea/LeftColumn/Opponent2,
 			"count_side": "right",
 			"name_label": $Margin/Root/TableArea/LeftColumn/Opponent2/Row/Info/Name,
+			"turn_label": $Margin/Root/TableArea/LeftColumn/Opponent2/Row/Info/TurnBadge,
+			"countdown_label": $Margin/Root/TableArea/LeftColumn/Opponent2/Row/Countdown,
 			"avatar_label": $Margin/Root/TableArea/LeftColumn/Opponent2/Row/Info/Avatar,
 			"role_label": $Margin/Root/TableArea/LeftColumn/Opponent2/Row/Info/RoleBadge,
-			"count_label": $Margin/Root/TableArea/LeftColumn/Opponent2/Row/Info/Count,
+			"pass_label": $Margin/Root/TableArea/LeftColumn/Opponent2/Row/PassLabel,
 			"play_container": $Margin/Root/TableArea/LeftColumn/Opponent2/Row/PlayRow
 		},
 		{
@@ -159,15 +166,18 @@ func _bind_player_nodes() -> void:
 			"panel": $Margin/Root/TableArea/LeftColumn/Opponent3,
 			"count_side": "right",
 			"name_label": $Margin/Root/TableArea/LeftColumn/Opponent3/Row/Info/Name,
+			"turn_label": $Margin/Root/TableArea/LeftColumn/Opponent3/Row/Info/TurnBadge,
+			"countdown_label": $Margin/Root/TableArea/LeftColumn/Opponent3/Row/Countdown,
 			"avatar_label": $Margin/Root/TableArea/LeftColumn/Opponent3/Row/Info/Avatar,
 			"role_label": $Margin/Root/TableArea/LeftColumn/Opponent3/Row/Info/RoleBadge,
-			"count_label": $Margin/Root/TableArea/LeftColumn/Opponent3/Row/Info/Count,
+			"pass_label": $Margin/Root/TableArea/LeftColumn/Opponent3/Row/PassLabel,
 			"play_container": $Margin/Root/TableArea/LeftColumn/Opponent3/Row/PlayRow
 		}
 	]
 
 
 func _deal_cards() -> void:
+	players[HUMAN_PLAYER_INDEX]["name"] = _get_user_name()
 	for player in players:
 		player["cards"] = []
 	selected_card_ids.clear()
@@ -178,6 +188,8 @@ func _deal_cards() -> void:
 	last_play = {}
 	consecutive_passes = 0
 	ai_turn_token += 1
+	turn_deadline_msec = 0
+	turn_timeout_triggered = false
 	_reset_hint_cycle()
 	for player in players:
 		player["role"] = ""
@@ -198,14 +210,14 @@ func _deal_cards() -> void:
 	for player in players:
 		player["cards"].sort_custom(Callable(self, "_sort_cards"))
 
-	_assign_emperor()
+	_assign_roles()
 	current_turn_index = emperor_player_index
+	_start_turn_countdown()
 	_refresh_ui(deck.size() + threes.size())
 
 
 func _refresh_ui(total_cards: int) -> void:
 	_reset_hint_cycle()
-	var current_player = players[current_turn_index]
 	var human_player = players[HUMAN_PLAYER_INDEX]
 	var current_hand = human_player["cards"]
 	var human_shown_play: Array = human_player.get("shown_play", [])
@@ -217,13 +229,10 @@ func _refresh_ui(total_cards: int) -> void:
 
 	if last_play.is_empty():
 		status_label.text = "已将 %d 张牌发给 %d 名玩家，其中 3 共 5 张且每人 1 张。" % [total_cards, PLAYER_COUNT]
-	center_hint.text = "下方始终展示你的手牌，其余四名为 AI。"
-	current_turn_label.text = "当前出牌：%s" % _format_player_name(current_turn_index)
-	emperor_label.text = "皇帝：%s" % _get_emperor_display_name()
-	last_play_label.text = _get_last_play_text()
-	player_label.text = "你的手牌：%s" % _format_player_name(HUMAN_PLAYER_INDEX)
-	player_role_badge.text = _get_player_status_badge(HUMAN_PLAYER_INDEX)
-	hand_meta.text = "手牌数：%d" % current_hand.size()
+	player_label.text = _format_player_name(HUMAN_PLAYER_INDEX)
+	player_role_icon.text = _get_role_icon(HUMAN_PLAYER_INDEX)
+	player_countdown_label.text = _get_countdown_text(HUMAN_PLAYER_INDEX)
+	player_card_count_label.text = "剩余 %d 张" % current_hand.size()
 	_render_current_hand(current_hand)
 	if not selected_card_ids.is_empty():
 		call_deferred("_refresh_selection_state")
@@ -236,16 +245,20 @@ func _update_opponent_slots() -> void:
 	for slot in opponent_slots:
 		var player_index = int(slot["player_index"])
 		var player = players[player_index]
-		slot["count_label"].text = "手牌数：%d" % player["cards"].size()
 		slot["name_label"].text = _format_player_name(player_index)
+		slot["turn_label"].text = ""
+		slot["countdown_label"].text = _get_countdown_text(player_index)
 		slot["avatar_label"].text = _format_player_avatar(player_index)
-		slot["role_label"].text = _get_player_status_badge(player_index)
+		slot["role_label"].text = ""
+		var pass_label: Label = slot.get("pass_label")
+		if pass_label != null:
+			pass_label.visible = bool(player.get("passed", false))
 		_render_play_cards(
 			slot["play_container"],
 			player.get("shown_play", []),
 			OPPONENT_PLAY_SCALE,
 			slot["play_container"].alignment,
-			bool(player.get("passed", false)),
+			false,
 			String(slot.get("count_side", "right"))
 		)
 
@@ -257,25 +270,31 @@ func _apply_ui_skin() -> void:
 	UI_SKIN.apply_button(pass_button, "ghost")
 	UI_SKIN.apply_button(play_button, "primary")
 	UI_SKIN.apply_button(hint_button, "secondary")
-	UI_SKIN.apply_panel($Margin/Root/TableArea/CenterInfo, "center")
 	$Margin/Root/PlayerHandPanel.add_theme_stylebox_override("panel", empty_style)
 	UI_SKIN.apply_label($Margin/Root/Header/TitleBlock/Title, "title")
 	UI_SKIN.apply_label(status_label, "muted")
-	UI_SKIN.apply_label($Margin/Root/TableArea/CenterInfo/VBox/CenterTitle, "section")
-	UI_SKIN.apply_label(center_hint, "muted")
-	UI_SKIN.apply_label(current_turn_label, "accent")
-	UI_SKIN.apply_label(emperor_label, "info")
-	UI_SKIN.apply_label(last_play_label, "muted")
 	UI_SKIN.apply_label(player_label, "section")
-	UI_SKIN.apply_label(player_role_badge, "accent")
-	UI_SKIN.apply_label(hand_meta, "muted")
+	UI_SKIN.apply_label(player_role_icon, "accent")
+	UI_SKIN.apply_label(player_countdown_label, "info")
+	player_countdown_label.add_theme_font_size_override("font_size", 28)
+	player_countdown_label.add_theme_color_override("font_color", Color(1.0, 0.88, 0.55, 1.0))
+	UI_SKIN.apply_label(player_card_count_label, "section")
 	for slot in opponent_slots:
 		var panel: PanelContainer = slot["panel"]
 		panel.add_theme_stylebox_override("panel", empty_style)
+		UI_SKIN.apply_label(slot["turn_label"], "accent")
+		var countdown_label: Label = slot.get("countdown_label")
+		if countdown_label != null:
+			UI_SKIN.apply_label(countdown_label, "info")
+			countdown_label.add_theme_font_size_override("font_size", 28)
+			countdown_label.add_theme_color_override("font_color", Color(1.0, 0.88, 0.55, 1.0))
 		UI_SKIN.apply_label(slot["avatar_label"], "accent")
 		UI_SKIN.apply_label(slot["name_label"], "section")
 		UI_SKIN.apply_label(slot["role_label"], "accent")
-		UI_SKIN.apply_label(slot["count_label"], "muted")
+		var pass_label: Label = slot.get("pass_label")
+		if pass_label != null:
+			UI_SKIN.apply_label(pass_label, "muted")
+			pass_label.add_theme_font_size_override("font_size", 22)
 
 func _apply_background_shader() -> void:
 	var shader_material := ShaderMaterial.new()
@@ -288,17 +307,29 @@ func _apply_background_shader() -> void:
 	background_rect.material = shader_material
 	table_glow.color = Color(0.10, 0.30, 0.26, 0.62)
 
-func _get_player_status_badge(player_index: int) -> String:
-	var fragments: Array = []
-	if player_index == emperor_player_index:
-		fragments.append("皇帝")
-	if player_index == current_turn_index:
-		fragments.append("出牌中")
-	elif bool(players[player_index].get("passed", false)):
-		fragments.append("不要")
-	if fragments.is_empty():
-		return "待机"
-	return " · ".join(fragments)
+func _get_player_identity_text(player_index: int) -> String:
+	return String(players[player_index].get("role", ""))
+
+
+func _get_role_icon(player_index: int) -> String:
+	var role := String(players[player_index].get("role", ""))
+	match role:
+		"皇帝":
+			return "👑"
+		"独保":
+			return "👑🗡"
+		"侍卫":
+			return "🗡"
+		"革命党":
+			return "⚑"
+		_:
+			return ""
+
+
+func _get_countdown_text(player_index: int) -> String:
+	if player_index != current_turn_index or turn_deadline_msec <= 0:
+		return ""
+	return "%ds" % _get_turn_countdown_seconds()
 
 
 func _render_current_hand(hand: Array) -> void:
@@ -565,7 +596,8 @@ func _update_action_buttons() -> void:
 		can_play = not play_state.is_empty() and _can_beat_last_play(play_state)
 	var can_pass := is_human_turn and not last_play.is_empty() and int(last_play.get("player_index", -1)) != HUMAN_PLAYER_INDEX
 	play_button_row.visible = true
-	play_actions.visible = is_human_turn
+	play_actions.modulate = Color(1, 1, 1, 1.0 if is_human_turn else 0.0)
+	play_actions.mouse_filter = Control.MOUSE_FILTER_STOP if is_human_turn else Control.MOUSE_FILTER_IGNORE
 	play_button.disabled = not can_play
 	hint_button.disabled = not is_human_turn
 	pass_button.disabled = not can_pass
@@ -644,6 +676,7 @@ func _on_play_button_pressed() -> void:
 	if current_cards.is_empty():
 		var win_text := "%s 获胜。" % _format_player_name(current_turn_index)
 		last_play = {}
+		turn_deadline_msec = 0
 		_clear_displayed_plays()
 		_refresh_ui(_get_total_card_count())
 		status_label.text = win_text
@@ -673,6 +706,7 @@ func _on_pass_button_pressed() -> void:
 	if consecutive_passes >= PLAYER_COUNT - 1:
 		consecutive_passes = 0
 		current_turn_index = last_play.get("player_index", current_turn_index)
+		_start_turn_countdown()
 		last_play = {}
 		_clear_displayed_plays()
 		var reset_text := "其余玩家都不要，重新由 %s 领出。" % _format_player_name(current_turn_index)
@@ -706,37 +740,36 @@ func _sort_card_ids_desc(a: String, b: String) -> bool:
 	return a > b
 
 
-func _assign_emperor() -> void:
+func _assign_roles() -> void:
+	emperor_player_index = -1
 	for index in range(players.size()):
 		var cards = players[index]["cards"]
+		var has_emperor := false
+		var has_guard := false
 		for card in cards:
-			if String(card) == EMPEROR_CARD:
-				emperor_player_index = index
-				players[index]["role"] = "皇帝"
-				return
+			var card_text := String(card)
+			if card_text == EMPEROR_CARD:
+				has_emperor = true
+			elif _get_rank(card_text) == "4":
+				has_guard = true
+		if has_emperor:
+			emperor_player_index = index
+		if has_emperor and has_guard:
+			players[index]["role"] = "独保"
+		elif has_emperor:
+			players[index]["role"] = "皇帝"
+		elif has_guard:
+			players[index]["role"] = "侍卫"
+		else:
+			players[index]["role"] = "革命党"
 
 
 func _format_player_name(player_index: int) -> String:
-	var player = players[player_index]
-	if player.get("role", "") == "皇帝":
-		return "%s · 皇帝" % player["name"]
-	return player["name"]
+	return String(players[player_index]["name"])
 
 
 func _format_player_avatar(player_index: int) -> String:
-	var player = players[player_index]
-	var base_avatar := "🙂"
-	if player_index == 1:
-		base_avatar = "🙂"
-	elif player_index == 2:
-		base_avatar = "😎"
-	elif player_index == 3:
-		base_avatar = "🤖"
-	elif player_index == 4:
-		base_avatar = "👽"
-	if player.get("role", "") == "皇帝":
-		return "👑"
-	return base_avatar
+	return _get_role_icon(player_index)
 
 
 func _get_emperor_display_name() -> String:
@@ -837,6 +870,7 @@ func _sort_jokers_ascending(a: String, b: String) -> bool:
 
 func _advance_turn() -> void:
 	current_turn_index = (current_turn_index + 1) % PLAYER_COUNT
+	_start_turn_countdown()
 
 
 func _get_total_card_count() -> int:
@@ -870,6 +904,8 @@ func _run_ai_turn(token: int) -> void:
 	if token != ai_turn_token:
 		return
 	if current_turn_index == HUMAN_PLAYER_INDEX:
+		return
+	if turn_timeout_triggered:
 		return
 	var ai_action := _choose_ai_action()
 	if ai_action.get("type", "pass") == "play":
@@ -948,6 +984,7 @@ func _execute_ai_play(ai_action: Dictionary) -> void:
 	var action_text := "%s 出牌：%s" % [_format_player_name(current_turn_index), String(last_play.get("display_text", ""))]
 	if current_cards.is_empty():
 		last_play = {}
+		turn_deadline_msec = 0
 		_clear_displayed_plays()
 		_refresh_ui(_get_total_card_count())
 		status_label.text = "%s 获胜。" % _format_player_name(current_turn_index)
@@ -966,6 +1003,7 @@ func _execute_ai_pass() -> void:
 	if consecutive_passes >= PLAYER_COUNT - 1:
 		consecutive_passes = 0
 		current_turn_index = int(last_play.get("player_index", current_turn_index))
+		_start_turn_countdown()
 		last_play = {}
 		_clear_displayed_plays()
 		_refresh_ui(_get_total_card_count())
@@ -981,6 +1019,21 @@ func _clear_displayed_plays() -> void:
 	for player in players:
 		player["passed"] = false
 		player["shown_play"] = []
+
+
+func _process(_delta: float) -> void:
+	if current_turn_index < 0 or current_turn_index >= players.size():
+		return
+	if turn_deadline_msec <= 0:
+		return
+	if turn_timeout_triggered:
+		return
+	if Time.get_ticks_msec() < turn_deadline_msec:
+		_update_turn_labels()
+		return
+	turn_timeout_triggered = true
+	ai_turn_token += 1
+	_handle_turn_timeout()
 
 
 func _find_min_play_for_player(player_index: int) -> Dictionary:
@@ -1241,7 +1294,7 @@ func _take_visible_rank_ids(group_ids: Array, count: int) -> Array:
 
 
 func _needs_extra_gap_between_ranks(current_rank: String, next_rank: String) -> bool:
-	return _is_top_special_rank(current_rank) or _is_top_special_rank(next_rank)
+	return false
 
 
 func _is_top_special_rank(rank: String) -> bool:
@@ -1402,3 +1455,54 @@ func _build_hint_suggestions() -> Array:
 
 func _sort_hint_suggestions(a: Dictionary, b: Dictionary) -> bool:
 	return _is_play_weaker(a.get("play_state", {}), b.get("play_state", {}))
+
+
+func _get_user_name() -> String:
+	var settings := get_node_or_null("/root/UserSettings")
+	if settings == null:
+		return "你"
+	return String(settings.get_user_name())
+
+
+func _start_turn_countdown() -> void:
+	turn_timeout_triggered = false
+	turn_deadline_msec = Time.get_ticks_msec() + 30000
+	_update_turn_labels()
+
+
+func _get_turn_countdown_seconds() -> int:
+	if turn_deadline_msec <= 0:
+		return 30
+	var remaining_msec := maxi(turn_deadline_msec - Time.get_ticks_msec(), 0)
+	return maxi(int(ceil(float(remaining_msec) / 1000.0)), 0)
+
+
+func _update_turn_labels() -> void:
+	if is_instance_valid(player_countdown_label):
+		player_countdown_label.text = _get_countdown_text(HUMAN_PLAYER_INDEX)
+	for slot in opponent_slots:
+		var player_index := int(slot["player_index"])
+		slot["turn_label"].text = ""
+		slot["countdown_label"].text = _get_countdown_text(player_index)
+
+
+func _handle_turn_timeout() -> void:
+	if current_turn_index != HUMAN_PLAYER_INDEX:
+		_execute_ai_pass()
+		return
+	if not last_play.is_empty() and int(last_play.get("player_index", -1)) != HUMAN_PLAYER_INDEX:
+		_on_pass_button_pressed()
+		status_label.text = "%s 超时，已自动不要。" % _format_player_name(HUMAN_PLAYER_INDEX)
+		return
+
+	var suggestions := _get_hint_suggestions()
+	if suggestions.is_empty():
+		status_label.text = "%s 超时，但当前没有可自动执行的操作。" % _format_player_name(HUMAN_PLAYER_INDEX)
+		_start_turn_countdown()
+		return
+
+	selected_card_ids = suggestions[0].get("card_ids", []).duplicate()
+	selected_card_ids.sort()
+	_refresh_selection_state()
+	_on_play_button_pressed()
+	status_label.text = "%s 超时，已自动出最小可出牌。" % _format_player_name(HUMAN_PLAYER_INDEX)

@@ -20,6 +20,7 @@ var joker_style_index := 0
 var hand_group_separation := -44
 var hand_rank_gap := 0
 var play_area_separation := -44
+var user_name := "你"
 
 var _card_cache: Dictionary = {}
 var _joker_color_cache: Dictionary = {}
@@ -76,6 +77,16 @@ func get_play_area_separation() -> int:
 
 func set_play_area_separation(value: int) -> void:
 	play_area_separation = clampi(value, -60, -10)
+	_save_settings()
+
+
+func get_user_name() -> String:
+	return user_name
+
+
+func set_user_name(value: String) -> void:
+	var trimmed_name := value.strip_edges()
+	user_name = trimmed_name if trimmed_name != "" else "你"
 	_save_settings()
 
 
@@ -173,6 +184,9 @@ func _load_settings() -> void:
 	hand_group_separation = int(config.get_value("cards", "hand_group_separation", hand_group_separation))
 	hand_rank_gap = int(config.get_value("cards", "hand_rank_gap", hand_rank_gap))
 	play_area_separation = int(config.get_value("cards", "play_area_separation", play_area_separation))
+	user_name = String(config.get_value("profile", "user_name", user_name)).strip_edges()
+	if user_name == "":
+		user_name = "你"
 
 
 func _save_settings() -> void:
@@ -182,4 +196,5 @@ func _save_settings() -> void:
 	config.set_value("cards", "hand_group_separation", hand_group_separation)
 	config.set_value("cards", "hand_rank_gap", hand_rank_gap)
 	config.set_value("cards", "play_area_separation", play_area_separation)
+	config.set_value("profile", "user_name", user_name)
 	config.save(SETTINGS_PATH)
