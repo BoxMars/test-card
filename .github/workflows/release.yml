@@ -16,67 +16,53 @@ env:
 
 jobs:
   build:
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
-            preset: Linux/X11
-            editor_url: https://downloads.godotengine.org/?flavor=stable&platform=linux.x86_64&slug=linux.x86_64.zip&version=4.6.1
+          - preset: Linux/X11
             export_path: build/linux/TestCard.x86_64
             artifact_name: TestCard-linux-x86_64
             archive_name: TestCard-linux-x86_64.zip
-          - os: windows-latest
-            preset: Windows Desktop
-            editor_url: https://downloads.godotengine.org/?flavor=stable&platform=windows.64&slug=win64_console.exe.zip&version=4.6.1
+            package_cmd: |
+              cd build/linux
+              zip -q -r "$GITHUB_WORKSPACE/dist/TestCard-linux-x86_64.zip" TestCard.x86_64 TestCard.pck
+          - preset: Windows Desktop
             export_path: build/windows/TestCard.exe
             artifact_name: TestCard-windows-x86_64
             archive_name: TestCard-windows-x86_64.zip
-          - os: macos-latest
-            preset: macOS
-            editor_url: https://downloads.godotengine.org/?flavor=stable&platform=macos.universal&slug=macos.universal.zip&version=4.6.1
+            package_cmd: |
+              cd build/windows
+              zip -q -r "$GITHUB_WORKSPACE/dist/TestCard-windows-x86_64.zip" TestCard.exe TestCard.pck
+          - preset: macOS
             export_path: build/macos/TestCard.app
             artifact_name: TestCard-macos-universal
             archive_name: TestCard-macos-universal.zip
-
-    runs-on: ${{ matrix.os }}
+            package_cmd: |
+              cd build/macos
+              zip -q -r "$GITHUB_WORKSPACE/dist/TestCard-macos-universal.zip" TestCard.app
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install dependencies
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y unzip zip
+
       - name: Install Godot editor
-        if: runner.os == 'Linux'
         shell: bash
         run: |
           mkdir -p tools/godot
-          curl -L "${{ matrix.editor_url }}" -o tools/godot.zip
+          curl -L "https://downloads.godotengine.org/?flavor=stable&platform=linux.x86_64&slug=linux.x86_64.zip&version=$GODOT_VERSION" -o tools/godot.zip
           unzip -q tools/godot.zip -d tools/godot
           chmod +x tools/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64
           echo "GODOT_BIN=$PWD/tools/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64" >> "$GITHUB_ENV"
 
-      - name: Install Godot editor
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Force -Path tools | Out-Null
-          Invoke-WebRequest -Uri "${{ matrix.editor_url }}" -OutFile tools/godot.zip
-          Expand-Archive -LiteralPath tools/godot.zip -DestinationPath tools/godot
-          $godotExe = Get-ChildItem -Path tools/godot -Recurse -Filter "Godot_v${env:GODOT_VERSION}-stable_win64_console.exe" | Select-Object -First 1
-          if (-not $godotExe) { throw "Godot executable not found." }
-          "GODOT_BIN=$($godotExe.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: Install Godot editor
-        if: runner.os == 'macOS'
-        shell: bash
-        run: |
-          mkdir -p tools/godot
-          curl -L "${{ matrix.editor_url }}" -o tools/godot.zip
-          ditto -x -k tools/godot.zip tools/godot
-          echo "GODOT_BIN=$(find "$PWD/tools/godot" -path '*Godot.app/Contents/MacOS/Godot' -print -quit)" >> "$GITHUB_ENV"
-
       - name: Install export templates
-        if: runner.os == 'Linux'
         shell: bash
         run: |
           templates_dir="$HOME/.local/share/godot/export_templates/$GODOT_TEMPLATE_VERSION"
@@ -88,95 +74,37 @@ jobs:
             mv "$templates_dir"/templates/* "$templates_dir"/
             rmdir "$templates_dir/templates"
           fi
-
-      - name: Install export templates
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          $templatesDir = Join-Path $env:APPDATA "Godot\export_templates\$env:GODOT_TEMPLATE_VERSION"
-          New-Item -ItemType Directory -Force -Path $templatesDir | Out-Null
-          Invoke-WebRequest -Uri "https://downloads.godotengine.org/?flavor=stable&platform=export_templates.tpz&slug=export_templates.tpz&version=${env:GODOT_VERSION}" -OutFile tools/export_templates.tpz
-          Copy-Item tools/export_templates.tpz tools/export_templates.zip
-          Expand-Archive -LiteralPath tools/export_templates.zip -DestinationPath $templatesDir -Force
-          $nestedTemplatesDir = Join-Path $templatesDir "templates"
-          if (Test-Path $nestedTemplatesDir) {
-            Get-ChildItem -Path $nestedTemplatesDir | Move-Item -Destination $templatesDir -Force
-            Remove-Item -Path $nestedTemplatesDir -Force
-          }
-
-      - name: Install export templates
-        if: runner.os == 'macOS'
-        shell: bash
-        run: |
-          templates_dir="$HOME/Library/Application Support/Godot/export_templates/$GODOT_TEMPLATE_VERSION"
-          mkdir -p "$templates_dir"
-          curl -L "https://downloads.godotengine.org/?flavor=stable&platform=export_templates.tpz&slug=export_templates.tpz&version=$GODOT_VERSION" -o tools/export_templates.tpz
-          cp tools/export_templates.tpz tools/export_templates.zip
-          ditto -x -k tools/export_templates.zip "$templates_dir"
-          if [ -d "$templates_dir/templates" ]; then
-            mv "$templates_dir"/templates/* "$templates_dir"/
-            rmdir "$templates_dir/templates"
-          fi
+          find "$templates_dir" -maxdepth 1 -type f | sort
 
       - name: Export project
-        if: runner.os == 'Linux'
         shell: bash
         run: |
           mkdir -p "$(dirname "${{ matrix.export_path }}")"
-          "$GODOT_BIN" --headless --path "$PWD" --export-release "${{ matrix.preset }}" "${{ matrix.export_path }}"
+          "$GODOT_BIN" --headless --verbose --path "$PWD" --export-release "${{ matrix.preset }}" "${{ matrix.export_path }}"
+          find build -maxdepth 3 -type f | sort
 
-      - name: Export project
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Force -Path (Split-Path "${{ matrix.export_path }}") | Out-Null
-          & "$env:GODOT_BIN" --headless --verbose --path "$PWD" --export-release "${{ matrix.preset }}" "${{ matrix.export_path }}"
-          if ($LASTEXITCODE -ne 0) { throw "Godot Windows export command failed with exit code $LASTEXITCODE." }
-          Get-ChildItem -Recurse build | Select-Object FullName
-          $exe = Get-ChildItem -Path build/windows -Recurse -Filter *.exe -File | Select-Object -First 1
-          $pck = Get-ChildItem -Path build/windows -Recurse -Filter *.pck -File | Select-Object -First 1
-          if (-not $exe) { throw "Windows export step finished without producing an .exe in build/windows." }
-          if (-not $pck) { throw "Windows export step finished without producing a .pck in build/windows." }
-
-      - name: Export project
-        if: runner.os == 'macOS'
+      - name: Validate export outputs
         shell: bash
         run: |
-          mkdir -p "$(dirname "${{ matrix.export_path }}")"
-          "$GODOT_BIN" --headless --path "$PWD" --export-release "${{ matrix.preset }}" "${{ matrix.export_path }}"
+          case "${{ matrix.preset }}" in
+            "Linux/X11")
+              test -f build/linux/TestCard.x86_64
+              test -f build/linux/TestCard.pck
+              ;;
+            "Windows Desktop")
+              test -f build/windows/TestCard.exe
+              test -f build/windows/TestCard.pck
+              ;;
+            "macOS")
+              test -d build/macos/TestCard.app
+              ;;
+          esac
 
       - name: Package artifact
-        if: runner.os == 'Linux'
         shell: bash
         run: |
           mkdir -p dist
-          cd build/linux
-          zip -q -r "$GITHUB_WORKSPACE/dist/${{ matrix.archive_name }}" TestCard.x86_64 TestCard.pck
-
-      - name: Package artifact
-        if: runner.os == 'Windows'
-        shell: bash
-        run: |
-          mkdir -p dist
-          find build/windows -maxdepth 2 -type f
-          exe="$(find build/windows -type f -name '*.exe' | head -n 1)"
-          pck="$(find build/windows -type f -name '*.pck' | head -n 1)"
-          if [ -z "$exe" ]; then
-            echo "Windows export executable not found in build/windows."
-            exit 1
-          fi
-          if [ -z "$pck" ]; then
-            echo "Windows export PCK not found in build/windows."
-            exit 1
-          fi
-          7z a "dist/${{ matrix.archive_name }}" "$exe" "$pck"
-
-      - name: Package artifact
-        if: runner.os == 'macOS'
-        shell: bash
-        run: |
-          mkdir -p dist
-          ditto -c -k --keepParent "build/macos/TestCard.app" "dist/${{ matrix.archive_name }}"
+          ${{ matrix.package_cmd }}
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
