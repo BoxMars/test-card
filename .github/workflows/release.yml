@@ -153,8 +153,9 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path dist | Out-Null
-          $exe = Get-ChildItem -Path build/windows -Filter *.exe -File | Select-Object -First 1
-          $pck = Get-ChildItem -Path build/windows -Filter *.pck -File | Select-Object -First 1
+          Get-ChildItem -Path build/windows -Recurse | Select-Object FullName
+          $exe = Get-ChildItem -Path build/windows -Recurse -Filter *.exe -File | Select-Object -First 1
+          $pck = Get-ChildItem -Path build/windows -Recurse -Filter *.pck -File | Select-Object -First 1
           if (-not $exe) { throw "Windows export executable not found in build/windows." }
           if (-not $pck) { throw "Windows export PCK not found in build/windows." }
           Compress-Archive -Path $exe.FullName,$pck.FullName -DestinationPath "dist/${{ matrix.archive_name }}" -Force
