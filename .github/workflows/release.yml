@@ -89,6 +89,10 @@ jobs:
           curl -L "https://downloads.godotengine.org/?flavor=stable&platform=export_templates.tpz&slug=export_templates.tpz&version=$GODOT_VERSION" -o tools/export_templates.tpz
           cp tools/export_templates.tpz tools/export_templates.zip
           unzip -q tools/export_templates.zip -d "$templates_dir"
+          if [ -d "$templates_dir/templates" ]; then
+            mv "$templates_dir"/templates/* "$templates_dir"/
+            rmdir "$templates_dir/templates"
+          fi
 
       - name: Install export templates
         if: runner.os == 'Windows'
@@ -99,6 +103,11 @@ jobs:
           Invoke-WebRequest -Uri "https://downloads.godotengine.org/?flavor=stable&platform=export_templates.tpz&slug=export_templates.tpz&version=${env:GODOT_VERSION}" -OutFile tools/export_templates.tpz
           Copy-Item tools/export_templates.tpz tools/export_templates.zip
           Expand-Archive -LiteralPath tools/export_templates.zip -DestinationPath $templatesDir -Force
+          $nestedTemplatesDir = Join-Path $templatesDir "templates"
+          if (Test-Path $nestedTemplatesDir) {
+            Get-ChildItem -Path $nestedTemplatesDir | Move-Item -Destination $templatesDir -Force
+            Remove-Item -Path $nestedTemplatesDir -Force
+          }
 
       - name: Install export templates
         if: runner.os == 'macOS'
@@ -109,6 +118,10 @@ jobs:
           curl -L "https://downloads.godotengine.org/?flavor=stable&platform=export_templates.tpz&slug=export_templates.tpz&version=$GODOT_VERSION" -o tools/export_templates.tpz
           cp tools/export_templates.tpz tools/export_templates.zip
           ditto -x -k tools/export_templates.zip "$templates_dir"
+          if [ -d "$templates_dir/templates" ]; then
+            mv "$templates_dir"/templates/* "$templates_dir"/
+            rmdir "$templates_dir/templates"
+          fi
 
       - name: Export project
         if: runner.os == 'Linux'

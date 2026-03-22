@@ -20,6 +20,66 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0509804, 0.109804, 0.105882, 1)
 
+[node name="StageGlow" type="ColorRect" parent="." unique_id=1201000001]
+layout_mode = 1
+offset_left = 104.0
+offset_top = 92.0
+offset_right = -104.0
+offset_bottom = -108.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0823529, 0.25098, 0.219608, 0.58)
+
+[node name="LeftBloom" type="ColorRect" parent="." unique_id=1201000002]
+visible = false
+layout_mode = 1
+offset_left = -86.0
+offset_top = 96.0
+offset_right = 360.0
+offset_bottom = 780.0
+color = Color(0.913725, 0.521569, 0.262745, 0.11)
+
+[node name="RightBloom" type="ColorRect" parent="." unique_id=1201000003]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -360.0
+offset_top = 144.0
+offset_right = 86.0
+offset_bottom = 828.0
+grow_horizontal = 0
+color = Color(0.278431, 0.72549, 0.623529, 0.1)
+
+[node name="TopVeil" type="ColorRect" parent="." unique_id=1201000004]
+visible = false
+layout_mode = 1
+offset_right = 1600.0
+offset_bottom = 212.0
+color = Color(0.94902, 0.694118, 0.372549, 0.05)
+
+[node name="BottomVeil" type="ColorRect" parent="." unique_id=1201000005]
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -196.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.0470588, 0.0823529, 0.0862745, 0.58)
+
+[node name="Frame" type="PanelContainer" parent="." unique_id=1201000006]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
 [node name="CenterBox" type="CenterContainer" parent="." unique_id=874262416]
 layout_mode = 1
 anchors_preset = 15
@@ -39,6 +99,11 @@ theme_override_constants/separation = 18
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "保皇"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="CenterBox/Panel/VBox" unique_id=1201000007]
+layout_mode = 2
+text = "四副牌桌，五人角力"
 horizontal_alignment = 1
 
 [node name="NameLabel" type="Label" parent="CenterBox/Panel/VBox" unique_id=365996469]

@@ -414,7 +414,6 @@ horizontal_alignment = 1
 
 [node name="LeftTopPlayFixed" type="HBoxContainer" parent="Margin/Root/TableArea" unique_id=1667125974]
 unique_name_in_owner = true
-visible = false
 z_index = 4
 clip_contents = true
 layout_mode = 1
@@ -426,7 +425,6 @@ theme_override_constants/separation = -30
 
 [node name="LeftBottomPlayFixed" type="HBoxContainer" parent="Margin/Root/TableArea" unique_id=925054640]
 unique_name_in_owner = true
-visible = false
 z_index = 4
 clip_contents = true
 layout_mode = 1
@@ -438,7 +436,6 @@ theme_override_constants/separation = -30
 
 [node name="RightTopPlayFixed" type="HBoxContainer" parent="Margin/Root/TableArea" unique_id=1232431040]
 unique_name_in_owner = true
-visible = false
 z_index = 4
 clip_contents = true
 layout_mode = 1
@@ -451,7 +448,6 @@ alignment = 2
 
 [node name="RightBottomPlayFixed" type="HBoxContainer" parent="Margin/Root/TableArea" unique_id=1513236558]
 unique_name_in_owner = true
-visible = false
 z_index = 4
 clip_contents = true
 layout_mode = 1
