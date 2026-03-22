@@ -130,8 +130,12 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path (Split-Path "${{ matrix.export_path }}") | Out-Null
-          & "$env:GODOT_BIN" --headless --path "$PWD" --export-release "${{ matrix.preset }}" "${{ matrix.export_path }}"
+          & "$env:GODOT_BIN" --headless --verbose --path "$PWD" --export-release "${{ matrix.preset }}" "${{ matrix.export_path }}"
           Get-ChildItem -Recurse build | Select-Object FullName
+          $exe = Get-ChildItem -Path build/windows -Recurse -Filter *.exe -File | Select-Object -First 1
+          $pck = Get-ChildItem -Path build/windows -Recurse -Filter *.pck -File | Select-Object -First 1
+          if (-not $exe) { throw "Windows export step finished without producing an .exe in build/windows." }
+          if (-not $pck) { throw "Windows export step finished without producing a .pck in build/windows." }
 
       - name: Export project
         if: runner.os == 'macOS'
