@@ -150,15 +150,21 @@ jobs:
 
       - name: Package artifact
         if: runner.os == 'Windows'
-        shell: pwsh
+        shell: bash
         run: |
-          New-Item -ItemType Directory -Force -Path dist | Out-Null
-          Get-ChildItem -Path build/windows -Recurse | Select-Object FullName
-          $exe = Get-ChildItem -Path build/windows -Recurse -Filter *.exe -File | Select-Object -First 1
-          $pck = Get-ChildItem -Path build/windows -Recurse -Filter *.pck -File | Select-Object -First 1
-          if (-not $exe) { throw "Windows export executable not found in build/windows." }
-          if (-not $pck) { throw "Windows export PCK not found in build/windows." }
-          Compress-Archive -Path $exe.FullName,$pck.FullName -DestinationPath "dist/${{ matrix.archive_name }}" -Force
+          mkdir -p dist
+          find build/windows -maxdepth 2 -type f
+          exe="$(find build/windows -type f -name '*.exe' | head -n 1)"
+          pck="$(find build/windows -type f -name '*.pck' | head -n 1)"
+          if [ -z "$exe" ]; then
+            echo "Windows export executable not found in build/windows."
+            exit 1
+          fi
+          if [ -z "$pck" ]; then
+            echo "Windows export PCK not found in build/windows."
+            exit 1
+          fi
+          7z a "dist/${{ matrix.archive_name }}" "$exe" "$pck"
 
       - name: Package artifact
         if: runner.os == 'macOS'
