@@ -28,7 +28,7 @@ jobs:
             archive_name: TestCard-linux-x86_64.zip
           - os: windows-latest
             preset: Windows Desktop
-            editor_url: https://downloads.godotengine.org/?flavor=stable&platform=windows.64&slug=win64.exe.zip&version=4.6.1
+            editor_url: https://downloads.godotengine.org/?flavor=stable&platform=windows.64&slug=win64_console.exe.zip&version=4.6.1
             export_path: build/windows/TestCard.exe
             artifact_name: TestCard-windows-x86_64
             archive_name: TestCard-windows-x86_64.zip
@@ -62,7 +62,7 @@ jobs:
           New-Item -ItemType Directory -Force -Path tools | Out-Null
           Invoke-WebRequest -Uri "${{ matrix.editor_url }}" -OutFile tools/godot.zip
           Expand-Archive -LiteralPath tools/godot.zip -DestinationPath tools/godot
-          $godotExe = Get-ChildItem -Path tools/godot -Recurse -Filter "Godot_v${env:GODOT_VERSION}-stable_win64.exe" | Select-Object -First 1
+          $godotExe = Get-ChildItem -Path tools/godot -Recurse -Filter "Godot_v${env:GODOT_VERSION}-stable_win64_console.exe" | Select-Object -First 1
           if (-not $godotExe) { throw "Godot executable not found." }
           "GODOT_BIN=$($godotExe.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
@@ -131,6 +131,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path (Split-Path "${{ matrix.export_path }}") | Out-Null
           & "$env:GODOT_BIN" --headless --verbose --path "$PWD" --export-release "${{ matrix.preset }}" "${{ matrix.export_path }}"
+          if ($LASTEXITCODE -ne 0) { throw "Godot Windows export command failed with exit code $LASTEXITCODE." }
           Get-ChildItem -Recurse build | Select-Object FullName
           $exe = Get-ChildItem -Path build/windows -Recurse -Filter *.exe -File | Select-Object -First 1
           $pck = Get-ChildItem -Path build/windows -Recurse -Filter *.pck -File | Select-Object -First 1
