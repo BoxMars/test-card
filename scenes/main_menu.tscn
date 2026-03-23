@@ -22,54 +22,13 @@ color = Color(0.0509804, 0.109804, 0.105882, 1)
 
 [node name="StageGlow" type="ColorRect" parent="." unique_id=1201000001]
 layout_mode = 1
-offset_left = 104.0
-offset_top = 92.0
-offset_right = -104.0
-offset_bottom = -108.0
+offset_left = 180.0
+offset_top = 120.0
+offset_right = -180.0
+offset_bottom = -120.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.0823529, 0.25098, 0.219608, 0.58)
-
-[node name="LeftBloom" type="ColorRect" parent="." unique_id=1201000002]
-visible = false
-layout_mode = 1
-offset_left = -86.0
-offset_top = 96.0
-offset_right = 360.0
-offset_bottom = 780.0
-color = Color(0.913725, 0.521569, 0.262745, 0.11)
-
-[node name="RightBloom" type="ColorRect" parent="." unique_id=1201000003]
-visible = false
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -360.0
-offset_top = 144.0
-offset_right = 86.0
-offset_bottom = 828.0
-grow_horizontal = 0
-color = Color(0.278431, 0.72549, 0.623529, 0.1)
-
-[node name="TopVeil" type="ColorRect" parent="." unique_id=1201000004]
-visible = false
-layout_mode = 1
-offset_right = 1600.0
-offset_bottom = 212.0
-color = Color(0.94902, 0.694118, 0.372549, 0.05)
-
-[node name="BottomVeil" type="ColorRect" parent="." unique_id=1201000005]
-visible = false
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -196.0
-grow_horizontal = 2
-grow_vertical = 0
-color = Color(0.0470588, 0.0823529, 0.0862745, 0.58)
+color = Color(0.0823529, 0.25098, 0.219608, 0.42)
 
 [node name="Frame" type="PanelContainer" parent="." unique_id=1201000006]
 layout_mode = 1
@@ -80,7 +39,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="CenterBox" type="CenterContainer" parent="." unique_id=874262416]
+[node name="Center" type="CenterContainer" parent="." unique_id=1201000018]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -88,46 +47,108 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="CenterBox" unique_id=2011247531]
+[node name="Panel" type="PanelContainer" parent="Center" unique_id=1201000028]
+custom_minimum_size = Vector2(520, 0)
 layout_mode = 2
 
-[node name="VBox" type="VBoxContainer" parent="CenterBox/Panel" unique_id=606040184]
+[node name="VBox" type="VBoxContainer" parent="Center/Panel" unique_id=1201000029]
 layout_mode = 2
 theme_override_constants/separation = 18
 
-[node name="Title" type="Label" parent="CenterBox/Panel/VBox" unique_id=1188066124]
+[node name="Title" type="Label" parent="Center/Panel/VBox" unique_id=1188066124]
 layout_mode = 2
-theme_override_font_sizes/font_size = 40
 text = "保皇"
 horizontal_alignment = 1
 
-[node name="Subtitle" type="Label" parent="CenterBox/Panel/VBox" unique_id=1201000007]
+[node name="Subtitle" type="Label" parent="Center/Panel/VBox" unique_id=1201000007]
 layout_mode = 2
-text = "四副牌桌，五人角力"
+text = "山东风味狼人杀"
 horizontal_alignment = 1
 
-[node name="NameLabel" type="Label" parent="CenterBox/Panel/VBox" unique_id=365996469]
+[node name="NameDock" type="PanelContainer" parent="Center/Panel/VBox" unique_id=1201000016]
+custom_minimum_size = Vector2(0, 58)
 layout_mode = 2
-text = "用户名"
 
-[node name="NameInput" type="LineEdit" parent="CenterBox/Panel/VBox" unique_id=314411247]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(260, 48)
+[node name="NameDockRow" type="VBoxContainer" parent="Center/Panel/VBox/NameDock" unique_id=1201000017]
 layout_mode = 2
-placeholder_text = "输入要显示在牌桌上的名字"
+theme_override_constants/separation = 8
+
+[node name="NameLabel" type="Label" parent="Center/Panel/VBox/NameDock/NameDockRow" unique_id=365996469]
+layout_mode = 2
+text = "玩家名"
+
+[node name="NameInput" type="LineEdit" parent="Center/Panel/VBox/NameDock/NameDockRow" unique_id=314411247]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+placeholder_text = "输入昵称"
 max_length = 16
 
-[node name="StartButton" type="Button" parent="CenterBox/Panel/VBox" unique_id=149958888]
-custom_minimum_size = Vector2(260, 56)
+[node name="StartButton" type="Button" parent="Center/Panel/VBox" unique_id=149958888]
+custom_minimum_size = Vector2(0, 68)
 layout_mode = 2
-text = "开始游戏"
+text = "单机模式"
 
-[node name="SettingsButton" type="Button" parent="CenterBox/Panel/VBox" unique_id=1417448546]
-custom_minimum_size = Vector2(260, 56)
+[node name="NetworkDock" type="PanelContainer" parent="Center/Panel/VBox" unique_id=1201000030]
+custom_minimum_size = Vector2(0, 132)
+layout_mode = 2
+
+[node name="NetworkVBox" type="VBoxContainer" parent="Center/Panel/VBox/NetworkDock" unique_id=1201000031]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NetworkLabel" type="Label" parent="Center/Panel/VBox/NetworkDock/NetworkVBox" unique_id=1201000032]
+layout_mode = 2
+text = "联机模式"
+
+[node name="AddressRow" type="HBoxContainer" parent="Center/Panel/VBox/NetworkDock/NetworkVBox" unique_id=1201000033]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AddressInput" type="LineEdit" parent="Center/Panel/VBox/NetworkDock/NetworkVBox/AddressRow" unique_id=1201000034]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "房主 IP，例如 127.0.0.1"
+
+[node name="PortInput" type="LineEdit" parent="Center/Panel/VBox/NetworkDock/NetworkVBox/AddressRow" unique_id=1201000035]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(112, 40)
+layout_mode = 2
+text = "7000"
+placeholder_text = "端口"
+max_length = 5
+
+[node name="NetworkButtonRow" type="HBoxContainer" parent="Center/Panel/VBox/NetworkDock/NetworkVBox" unique_id=1201000036]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HostButton" type="Button" parent="Center/Panel/VBox/NetworkDock/NetworkVBox/NetworkButtonRow" unique_id=1201000037]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "创建房间"
+
+[node name="JoinButton" type="Button" parent="Center/Panel/VBox/NetworkDock/NetworkVBox/NetworkButtonRow" unique_id=1201000038]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "加入房间"
+
+[node name="NetworkStatus" type="Label" parent="Center/Panel/VBox/NetworkDock/NetworkVBox" unique_id=1201000039]
+unique_name_in_owner = true
+layout_mode = 2
+text = "局域网联机默认端口 7000。"
+
+[node name="SettingsButton" type="Button" parent="Center/Panel/VBox" unique_id=1417448546]
+custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
 text = "设置"
 
-[node name="QuitButton" type="Button" parent="CenterBox/Panel/VBox" unique_id=1728847932]
-custom_minimum_size = Vector2(260, 56)
+[node name="QuitButton" type="Button" parent="Center/Panel/VBox" unique_id=1728847932]
+custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
 text = "退出"

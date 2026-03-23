@@ -1,7 +1,7 @@
 extends Control
 
 const MAIN_MENU_SCENE := "res://scenes/main_menu.tscn"
-const CARD_VIEW_SCRIPT := preload("res://scripts/card_view.gd")
+const CARD_VIEW_SCENE := preload("res://scenes/components/card_view.tscn")
 const UI_SKIN := preload("res://scripts/ui_skin.gd")
 
 @onready var mode_option: OptionButton = %ModeOption
@@ -195,7 +195,7 @@ func _render_spacing_preview() -> void:
 	var preview_cards := ["♥7", "♣7", "♦7", "♠7", "小王", "大王", "♥4", "皇帝牌"]
 	for card_text_variant in preview_cards:
 		var card_text := String(card_text_variant)
-		var card_view := CARD_VIEW_SCRIPT.new()
+		var card_view := CARD_VIEW_SCENE.instantiate() as CardView
 		card_view.setup("preview_%s" % card_text, card_text)
 		card_view.set_disabled(true, false)
 		preview_row.add_child(card_view)
@@ -227,7 +227,7 @@ func _render_rank_gap_preview() -> void:
 
 		for card_text_variant in group_cards:
 			var card_text := String(card_text_variant)
-			var card_view := CARD_VIEW_SCRIPT.new()
+			var card_view := CARD_VIEW_SCENE.instantiate() as CardView
 			card_view.setup("rank_preview_%s" % card_text, card_text)
 			card_view.set_disabled(true, false)
 			holder.add_child(card_view)
@@ -246,7 +246,7 @@ func _render_play_gap_preview() -> void:
 	var preview_cards := ["♥7", "♣7", "♦7", "♠7", "小王", "大王", "♥4", "皇帝牌"]
 	for card_text_variant in preview_cards:
 		var card_text := String(card_text_variant)
-		var card_view := CARD_VIEW_SCRIPT.new()
+		var card_view := CARD_VIEW_SCENE.instantiate() as CardView
 		card_view.setup("play_preview_%s" % card_text, card_text)
 		card_view.set_disabled(true, false)
 		play_preview_row.add_child(card_view)

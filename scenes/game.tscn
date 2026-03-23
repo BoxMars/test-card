@@ -98,7 +98,21 @@ alignment = 2
 [node name="DealButton" type="Button" parent="Margin/Root/Header/Actions" unique_id=1452051811]
 custom_minimum_size = Vector2(130, 42)
 layout_mode = 2
-text = "重新发牌"
+text = "发牌"
+
+[node name="PurchaseInfoButton" type="Button" parent="Margin/Root/Header/Actions" unique_id=2001000001]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 42)
+layout_mode = 2
+text = "购3信息"
+tooltip_text = "本局暂无购3信息。"
+
+[node name="PurchaseActionButton" type="Button" parent="Margin/Root/Header/Actions" unique_id=2001000002]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 42)
+layout_mode = 2
+text = "开始购3"
+disabled = true
 
 [node name="MenuButton" type="Button" parent="Margin/Root/Header/Actions" unique_id=188569454]
 custom_minimum_size = Vector2(130, 42)
@@ -287,7 +301,7 @@ layout_mode = 2
 clip_contents = true
 custom_minimum_size = Vector2(188, 64)
 layout_mode = 1
-offset_left = 38.0
+offset_left = -74.0
 offset_top = 29.0
 offset_right = 226.0
 offset_bottom = 93.0
@@ -357,7 +371,7 @@ layout_mode = 2
 clip_contents = true
 custom_minimum_size = Vector2(188, 64)
 layout_mode = 1
-offset_left = 38.0
+offset_left = -74.0
 offset_top = 27.0
 offset_right = 226.0
 offset_bottom = 91.0
@@ -684,6 +698,7 @@ custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
 [connection signal="pressed" from="Margin/Root/Header/Actions/DealButton" to="." method="_on_deal_button_pressed"]
+[connection signal="pressed" from="Margin/Root/Header/Actions/PurchaseActionButton" to="." method="_on_purchase_action_button_pressed"]
 [connection signal="pressed" from="Margin/Root/Header/Actions/MenuButton" to="." method="_on_menu_button_pressed"]
 [connection signal="pressed" from="Margin/Root/PlayerHandPanel/HandVBox/PlayButtonSlot/PlayButtonRow/PassButton" to="." method="_on_pass_button_pressed"]
 [connection signal="pressed" from="Margin/Root/PlayerHandPanel/HandVBox/PlayButtonSlot/PlayButtonRow/PlayButton" to="." method="_on_play_button_pressed"]

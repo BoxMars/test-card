@@ -1,18 +1,21 @@
 class_name UISkin
 extends RefCounted
 
-const BG_DARK := Color("0d1b1a")
-const BG_GREEN := Color("123b35")
-const PANEL_DARK := Color("132826")
-const PANEL_SOFT := Color("1d3430")
-const PANEL_WARM := Color("30271d")
-const BORDER_LIGHT := Color("e7d5a3")
-const BORDER_GREEN := Color("65b79f")
-const TEXT_MAIN := Color("f4efe0")
-const TEXT_MUTED := Color("c9bfaa")
-const ACCENT_GOLD := Color("f4b860")
-const ACCENT_RED := Color("db6a57")
-const ACCENT_BLUE := Color("6bc2d8")
+const BG_DARK := Color("081311")
+const BG_GREEN := Color("0f2823")
+const PANEL_DARK := Color("14201d")
+const PANEL_SOFT := Color("1d2d29")
+const PANEL_WARM := Color("342015")
+const BORDER_LIGHT := Color("f3d79a")
+const BORDER_GREEN := Color("72c7a9")
+const TEXT_MAIN := Color("f7f0dd")
+const TEXT_MUTED := Color("c7bfab")
+const ACCENT_GOLD := Color("f0b45d")
+const ACCENT_RED := Color("ca5d47")
+const ACCENT_BLUE := Color("5fb4c3")
+const ACCENT_GREEN := Color("83c27f")
+
+static var _ui_font: FontFile
 
 
 static func make_panel_style(
@@ -41,6 +44,12 @@ static func make_panel_style(
 	style.content_margin_right = 14
 	style.content_margin_bottom = 12
 	return style
+
+
+static func get_ui_font() -> Font:
+	if _ui_font == null:
+		_ui_font = load("res://assets/ui/fonts/GoNotoCurrent-Bold.ttf") as FontFile
+	return _ui_font
 
 
 static func make_button_style(
@@ -79,16 +88,22 @@ static func apply_button(button: Button, variant: String = "primary") -> void:
 
 	match variant:
 		"primary":
-			normal_bg = Color("8f412b")
-			hover_bg = Color("b05335")
-			pressed_bg = Color("6f2e1e")
+			normal_bg = Color("325c9a")
+			hover_bg = Color("4170b5")
+			pressed_bg = Color("24426f")
 			border = ACCENT_GOLD
 			text_color = TEXT_MAIN
 		"secondary":
-			normal_bg = Color("224842")
-			hover_bg = Color("2a6258")
-			pressed_bg = Color("173833")
+			normal_bg = Color("6f4926")
+			hover_bg = Color("88592e")
+			pressed_bg = Color("57391e")
 			border = BORDER_GREEN
+			text_color = TEXT_MAIN
+		"confirm":
+			normal_bg = Color("2f6b47")
+			hover_bg = Color("3b8559")
+			pressed_bg = Color("214b32")
+			border = ACCENT_GREEN
 			text_color = TEXT_MAIN
 		"danger":
 			normal_bg = Color("5a2624")
@@ -114,6 +129,7 @@ static func apply_button(button: Button, variant: String = "primary") -> void:
 	button.add_theme_color_override("font_focus_color", text_color)
 	button.add_theme_color_override("font_disabled_color", text_color.darkened(0.35))
 	button.add_theme_font_size_override("font_size", 18)
+	button.add_theme_font_override("font", get_ui_font())
 
 
 static func apply_line_edit(line_edit: LineEdit, variant: String = "default") -> void:
@@ -138,6 +154,7 @@ static func apply_line_edit(line_edit: LineEdit, variant: String = "default") ->
 	line_edit.add_theme_color_override("caret_color", ACCENT_GOLD)
 	line_edit.add_theme_color_override("selection_color", Color(0.42, 0.66, 0.59, 0.45))
 	line_edit.add_theme_font_size_override("font_size", 18)
+	line_edit.add_theme_font_override("font", get_ui_font())
 
 
 static func apply_panel(panel: PanelContainer, variant: String = "default") -> void:
@@ -163,6 +180,10 @@ static func apply_panel(panel: PanelContainer, variant: String = "default") -> v
 			bg = Color(0.08, 0.18, 0.17, 0.72)
 			border = Color(0.55, 0.83, 0.73, 0.65)
 			radius = 18
+		"black":
+			bg = Color("111111")
+			border = Color("75614b")
+			radius = 18
 
 	panel.add_theme_stylebox_override("panel", make_panel_style(bg, border, 2, radius))
 
@@ -171,7 +192,7 @@ static func apply_label(label: Label, variant: String = "body") -> void:
 	match variant:
 		"title":
 			label.add_theme_color_override("font_color", TEXT_MAIN)
-			label.add_theme_font_size_override("font_size", 34)
+			label.add_theme_font_size_override("font_size", 32)
 		"section":
 			label.add_theme_color_override("font_color", TEXT_MAIN)
 			label.add_theme_font_size_override("font_size", 20)
@@ -185,6 +206,7 @@ static func apply_label(label: Label, variant: String = "body") -> void:
 			label.add_theme_color_override("font_color", ACCENT_BLUE.lightened(0.25))
 		_:
 			label.add_theme_color_override("font_color", TEXT_MAIN)
+	label.add_theme_font_override("font", get_ui_font())
 
 
 static func apply_tab_container(tabs: TabContainer) -> void:
@@ -197,3 +219,4 @@ static func apply_tab_container(tabs: TabContainer) -> void:
 	tabs.add_theme_color_override("font_unselected_color", TEXT_MUTED)
 	tabs.add_theme_color_override("font_disabled_color", TEXT_MUTED.darkened(0.35))
 	tabs.add_theme_font_size_override("font_size", 18)
+	tabs.add_theme_font_override("font", get_ui_font())

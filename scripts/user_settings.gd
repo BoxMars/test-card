@@ -3,6 +3,7 @@ extends Node
 const RENDER_MODE_PROGRAMMATIC := "programmatic"
 const RENDER_MODE_ATLAS := "atlas"
 const SETTINGS_PATH := "user://settings.cfg"
+const DEV_PLAYER_NAME_FLAG := "--dev-player-name"
 
 const CARD_SHEET := preload("res://figures/card.png")
 const JOKER_SHEET := preload("res://figures/jokers.png")
@@ -21,6 +22,7 @@ var hand_group_separation := -44
 var hand_rank_gap := 0
 var play_area_separation := -44
 var user_name := "你"
+var runtime_user_name_override := ""
 
 var _card_cache: Dictionary = {}
 var _joker_color_cache: Dictionary = {}
@@ -30,6 +32,7 @@ var _joker_invert_cache: Dictionary = {}
 
 func _ready() -> void:
 	_load_settings()
+	_apply_runtime_dev_overrides()
 
 
 func get_render_mode() -> String:
@@ -81,12 +84,17 @@ func set_play_area_separation(value: int) -> void:
 
 
 func get_user_name() -> String:
+	if runtime_user_name_override != "":
+		return runtime_user_name_override
 	return user_name
 
 
 func set_user_name(value: String) -> void:
-	var trimmed_name := value.strip_edges()
-	user_name = trimmed_name if trimmed_name != "" else "你"
+	var sanitized_name := _sanitize_user_name(value)
+	if runtime_user_name_override != "":
+		runtime_user_name_override = sanitized_name
+		return
+	user_name = sanitized_name
 	_save_settings()
 
 
@@ -198,3 +206,22 @@ func _save_settings() -> void:
 	config.set_value("cards", "play_area_separation", play_area_separation)
 	config.set_value("profile", "user_name", user_name)
 	config.save(SETTINGS_PATH)
+
+
+func _apply_runtime_dev_overrides() -> void:
+	if not OS.is_debug_build():
+		return
+	var args: PackedStringArray = OS.get_cmdline_user_args()
+	for index in range(args.size()):
+		var arg := String(args[index])
+		if arg == DEV_PLAYER_NAME_FLAG and index + 1 < args.size():
+			runtime_user_name_override = _sanitize_user_name(String(args[index + 1]))
+			return
+		if arg.begins_with("%s=" % DEV_PLAYER_NAME_FLAG):
+			runtime_user_name_override = _sanitize_user_name(arg.trim_prefix("%s=" % DEV_PLAYER_NAME_FLAG))
+			return
+
+
+func _sanitize_user_name(value: String) -> String:
+	var trimmed_name := value.strip_edges()
+	return trimmed_name if trimmed_name != "" else "你"
